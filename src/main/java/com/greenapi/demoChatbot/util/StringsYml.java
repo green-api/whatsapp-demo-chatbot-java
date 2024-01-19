@@ -13,6 +13,7 @@ import java.util.Map;
 public class StringsYml {
 
     private final Map<String, Object> data = loadDataFromYaml(Paths.get("src/main/resources/strings.yml"));
+    private static final Yaml yaml = new Yaml();
 
     public String getText(String string, Language language) {
         return ((Map<String, Object>) data.get(string)).get(language.getValue()).toString();
@@ -23,19 +24,11 @@ public class StringsYml {
     }
 
     public String getText(String string, Language language, String string2) {
-        var map1 = (Map<String, Object>) data.get(string);
-        log.warn(map1);
-        var map2 = (Map<String, Object>) map1.get(language.getValue());
-        log.warn(map2);
-        var result = map2.get(string2);
-        log.warn(result);
-
-        return result.toString();
+        return ((Map<String, Object>)(((Map<String, Object>) data.get(string)).get(language.getValue()))).get(string2).toString();
     }
 
     private static Map<String, Object> loadDataFromYaml(Path path) {
         try (InputStream inputStream = Files.newInputStream(path)) {
-            Yaml yaml = new Yaml();
             return yaml.load(inputStream);
 
         } catch (Exception e) {
