@@ -1,11 +1,13 @@
 package com.greenapi.demoChatbot.scenes;
 
+import com.greenapi.chatbot.pkg.Scene;
 import com.greenapi.chatbot.pkg.state.State;
 import com.greenapi.client.pkg.models.notifications.MessageWebhook;
 import com.greenapi.demoChatbot.util.Language;
 import com.greenapi.demoChatbot.util.SessionManager;
+import com.greenapi.demoChatbot.util.YmlReader;
 
-public class MainMenu extends ExtendedScene {
+public class MainMenu extends Scene {
 
     @Override
     public State processIncomingMessage(MessageWebhook incomingMessage, State currentState) {
@@ -19,9 +21,9 @@ public class MainMenu extends ExtendedScene {
                 case "1" -> {
                     currentState.getData().put("lang", Language.ENG);
                     answerWithText(incomingMessage,
-                        stringsYml.getText("welcome_message", Language.ENG) +
+                        YmlReader.getString(new String[]{"welcome_message", Language.ENG.getValue()}) +
                             incomingMessage.getSenderData().getSenderName() +
-                            stringsYml.getText("menu", Language.ENG)
+                            YmlReader.getString(new String[]{"menu", Language.ENG.getValue()})
                     );
 
                     return activateNextScene(currentState, new Endpoints());
@@ -29,15 +31,15 @@ public class MainMenu extends ExtendedScene {
                 case "2" -> {
                     currentState.getData().put("lang", Language.RU);
                     answerWithText(incomingMessage,
-                        stringsYml.getText("welcome_message", Language.RU) +
+                        YmlReader.getString(new String[]{"welcome_message", Language.RU.getValue()}) +
                             incomingMessage.getSenderData().getSenderName() +
-                            stringsYml.getText("menu", Language.RU)
+                            YmlReader.getString(new String[]{"menu", Language.RU.getValue()})
                     );
 
                     return activateNextScene(currentState, new Endpoints());
                 }
                 default -> {
-                    answerWithText(incomingMessage, stringsYml.getText("specify_language"));
+                    answerWithText(incomingMessage, YmlReader.getString(new String[]{"specify_language"}));
 
                     return currentState;
                 }
