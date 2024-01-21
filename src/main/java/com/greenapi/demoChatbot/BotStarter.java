@@ -2,11 +2,8 @@ package com.greenapi.demoChatbot;
 
 import com.greenapi.chatbot.pkg.BotFactory;
 import com.greenapi.demoChatbot.scenes.Start;
-import com.greenapi.demoChatbot.util.YmlReader;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-import static com.greenapi.demoChatbot.util.YmlReader.getString;
 
 @SpringBootApplication
 public class BotStarter {
@@ -16,8 +13,8 @@ public class BotStarter {
         var botFactory = context.getBean(BotFactory.class);
 
         var bot = botFactory.createBot(
-            "1101848919",
-            "fe0453b47e1b403c8d88ce881291ea002292b3037ae045bcb2");
+            "{{INSTANCE}}",
+            "{{TOKEN}}");
 
         bot.setStartScene(new Start());
 
