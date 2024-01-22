@@ -98,7 +98,7 @@ public class Endpoints extends Scene {
                 options.add(new Option(YmlReader.getString(new String[]{"poll_option", lang.getValue(), "o2"})));
                 options.add(new Option(YmlReader.getString(new String[]{"poll_option", lang.getValue(), "o3"})));
 
-                answerWithPoll(incomingMessage, "Выберите вариант ответа ✔️\nНравится Вам работа демо чатбота?",
+                answerWithPoll(incomingMessage, YmlReader.getString(new String[]{"poll_name", lang.getValue()}),
                     options, false);
 
                 return currentState;
@@ -110,7 +110,8 @@ public class Endpoints extends Scene {
 
                 if (avatar.getBody().getUrlAvatar() != null) {
                     answerWithUrlFile(incomingMessage,
-                        YmlReader.getString(new String[]{"send_avatar_message", lang.getValue(), "avatar_exist"}), avatar.getBody().getUrlAvatar(), "avatar");
+                        YmlReader.getString(new String[]{"send_avatar_message", lang.getValue(), "avatar_exist"}),
+                        avatar.getBody().getUrlAvatar(), "avatar");
                 } else {
                     answerWithText(incomingMessage,
                         YmlReader.getString(new String[]{"send_avatar_message", lang.getValue(), "avatar_not_exist"}));

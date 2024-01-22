@@ -8,8 +8,8 @@ stop_message:
   ru: "Спасибо за использование чатбота GREEN-API, "
   eng: "Thank you for using the GREEN-API chatbot, "
 menu:
-  ru: "\nGREEN-API предоставляет отправку данных следующих видов. Выберите цифру из списка, чтобы проверить как работает метод отправки!\n1. Текстовое сообщение 📩\n2. Файл 📋\n3. Картинка 🖼\n4. Аудио 🎼\n5. Видео 📽️\n6. Контакт 📱\n7. Геолокация 🌎\n8. Опрос 🗳️\n9. Получить картинку моего аватара 🪞\n9. Отправить ссылку 🔗\n10. Создать группу с ботом 👥\n\nЧтобы вернуться в начало напишите *стоп*"
-  eng: "\nGREEN-API provides the following kinds of message services. Type in a number to see how the corresponding method works!\n\n1. Text message 📩\n2. File 📋\n3. Image 🖼\n4. Audio 🎼\n5. Video 📽️\n6. Contact 📱\n7. Geolocation 🌎\n8. Poll 🗳️\n9. Get a picture of my avatar 🪞\n9. Send link 🔗\n10. Create a group with a bot 👥\n\nTo restart the conversation type *stop*"
+  ru: "\nGREEN-API предоставляет отправку данных следующих видов. Выберите цифру из списка, чтобы проверить как работает метод отправки!\n1. Текстовое сообщение 📩\n2. Файл 📋\n3. Картинка 🖼\n4. Аудио 🎼\n5. Видео 📽️\n6. Контакт 📱\n7. Геолокация 🌎\n8. Опрос 🗳️\n9. Получить картинку моего аватара 🪞\n10. Отправить ссылку 🔗\n11. Создать группу с ботом 👥\n\nЧтобы вернуться в начало напишите *стоп*"
+  eng: "\nGREEN-API provides the following kinds of message services. Type in a number to see how the corresponding method works!\n\n1. Text message 📩\n2. File 📋\n3. Image 🖼\n4. Audio 🎼\n5. Video 📽️\n6. Contact 📱\n7. Geolocation 🌎\n8. Poll 🗳️\n9. Get a picture of my avatar 🪞\n10. Send link 🔗\n11. Create a group with a bot 👥\n\nTo restart the conversation type *stop*"
 send_text_message:
   ru: "Это сообщение отправлено через sendMessage метод.\n\nЧтобы узнать как работает метод, пройдите по ссылке\n"
   eng: "This message is sent via sendMessage method.\n\nIf you want to know how the method works, follow the link\n"
@@ -35,6 +35,9 @@ send_link_message:
 send_poll_message:
   ru: "Метод опроса https://green-api.com/docs/api/sending/SendPoll/ позволяет отправить опрос в чат, пользователи смогут сделать свой выбор нажав на выбранный пункт. Вы можете использовать оправ в качестве замены кнопкам, более подробно можно прочитать в статье"
   eng: "The survey method https://greenapi.com/em/docs/api/sending/SendPoll/ allows you to send a survey to the chat, users will be able to make their choice by clicking on the selected item. You can use frames as a replacement for buttons, you can read more in the article"
+poll_name:
+  ru: "Выберите вариант ответа ✔️\nНравится Вам работа демо чатбота?"
+  eng: "Choose the answer option ✔️\nDo you like the work of the demo chat bot?"
 poll_option:
   ru:
     o1: "Да"
