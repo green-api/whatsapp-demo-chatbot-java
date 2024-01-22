@@ -176,12 +176,12 @@ public class BotConfig {
 
 Всего в боте 3 сцены:
 
-Сцена [`Start`](src/main/java/com/greenapi/demoChatbot/scenes/Start.java) - отвечает на любое входящее сообщение, отправляет список доступных языков. Запускает сцену `MainMenu`.
-Сцена [`MainMenu`](src/main/java/com/greenapi/demoChatbot/scenes/MainMenu.java) - обрабатывает выбор пользователя и отправляет текст главного меню на выбранном языке. Запускает сцену `Endpoints`
-Сцена [`Endpoints`](src/main/java/com/greenapi/demoChatbot/scenes/Endpoints.java) - выполняет выбранный пользователем метод и отправляет описание метода на выбранном языке.
+- Сцена [`Start`](src/main/java/com/greenapi/demoChatbot/scenes/Start.java) - отвечает на любое входящее сообщение, отправляет список доступных языков. Запускает сцену `MainMenu`.
+- Сцена [`MainMenu`](src/main/java/com/greenapi/demoChatbot/scenes/MainMenu.java) - обрабатывает выбор пользователя и отправляет текст главного меню на выбранном языке. Запускает сцену `Endpoints`
+- Сцена [`Endpoints`](src/main/java/com/greenapi/demoChatbot/scenes/Endpoints.java) - выполняет выбранный пользователем метод и отправляет описание метода на выбранном языке.
 
-Класс [`SessionManager`](src/main/java/com/greenapi/demoChatbot/util/SessionManager.java) содержит метод `isSessionExpired` который возвращает `true` если пользователь не пишут боту более 2 минут. Он используется, чтобы снова устанавливать стартовую сцену, если боту долго не пишут.
-Класс [`YmlReader`](src/main/java/com/greenapi/demoChatbot/util/YmlReader.java) содержит метод `getString()` который возвращает строки из файла `strings.xml` по ключам. Этот файл используется для хранения текстов ответов бота.
+- Класс [`SessionManager`](src/main/java/com/greenapi/demoChatbot/util/SessionManager.java) содержит метод `isSessionExpired` который возвращает `true` если пользователь не пишут боту более 2 минут. Он используется, чтобы снова устанавливать стартовую сцену, если боту долго не пишут.
+- Класс [`YmlReader`](src/main/java/com/greenapi/demoChatbot/util/YmlReader.java) содержит метод `getString()` который возвращает строки из файла `strings.xml` по ключам. Этот файл используется для хранения текстов ответов бота.
 
 ## Управление сообщениями
 
