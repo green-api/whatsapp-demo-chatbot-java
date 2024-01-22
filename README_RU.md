@@ -1,6 +1,6 @@
 # whatsapp-demo-chatbot-java
 
-- [Documentation in English](https://github.com/green-api/whatsapp-demo-chatbot-java/blob/main/README.md).
+- [Documentation in English](README.md).
 
 Пример чатбота написанного на java с использованием API сервиса для Whatsapp [green-api.com](https://green-api.com/en/).
 Чатбот наглядно демонстрирует использование API для отправки текстовых сообщений, файлов, картинок, локаций и контактов.
@@ -195,7 +195,7 @@ public class BotConfig {
 ```java
     answerWithText(incomingMessage, YmlReader.getString(new String[]{"select_language"}));
 ```
-Однако другие методы отправки можно вызвать напрямую из библиотеки [whatsapp-api-client-java](https://github.com/green-api/whatsapp-api-client-java). Как, например, при отправке контакта:
+Однако другие методы отправки можно вызвать напрямую из библиотеки [whatsapp-api-client-java](https://github.com/green-api/whatsapp-api-client-java). Как, например, при получении аватара:
 ```java
     greenApi.service.getAvatar(incomingMessage.getSenderData().getChatId());
 ```
