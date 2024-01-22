@@ -180,8 +180,9 @@ There are 3 scenes in the bot:
 - Scene [`MainMenu`](src/main/java/com/greenapi/demoChatbot/scenes/MainMenu.java) - processes the user's selection and sends the main menu text in the selected language. Launches the `Endpoints` scene.
 - Scene [`Endpoints`](src/main/java/com/greenapi/demoChatbot/scenes/Endpoints.java) - executes the user-selected method and sends a description of the method in the selected language.
 
-- The [`SessionManager`](src/main/java/com/greenapi/demoChatbot/util/SessionManager.java) class contains the `isSessionExpired` method which returns `true` if the user does not write to the bot for more than 2 minutes. It is used to set the starting scene again if the bot has not been contacted for a long time.
-- The [`YmlReader`](src/main/java/com/greenapi/demoChatbot/util/YmlReader.java) class contains the `getString()` method which returns strings from the `strings.xml` file by key. This file is used to store the texts of the bot's responses.
+The [`SessionManager`](src/main/java/com/greenapi/demoChatbot/util/SessionManager.java) class contains the `isSessionExpired` method which returns `true` if the user does not write to the bot for more than 2 minutes. It is used to set the starting scene again if the bot has not been contacted for a long time.
+
+The [`YmlReader`](src/main/java/com/greenapi/demoChatbot/util/YmlReader.java) class contains the `getString()` method which returns strings from the `strings.xml` file by key. This file is used to store the texts of the bot's responses.
 
 ## Message management
 
