@@ -56,7 +56,7 @@ public class Endpoints extends Scene {
             }
             case "3" -> {
                 answerWithUrlFile(incomingMessage,
-                    YmlReader.getString(new String[]{"send_image_message", lang.getValue()}) +
+                    YmlReader.getString(new String[]{"send_file_message", lang.getValue()}) +
                         YmlReader.getString(new String[]{"links", lang.getValue(), "send_file_documentation"}),
                     "https://images.rawpixel.com/image_png_1100/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIzLTExL3Jhd3BpeGVsb2ZmaWNlMTlfcGhvdG9fb2ZfY29yZ2lzX2luX2NocmlzdG1hc19zd2VhdGVyX2luX2FfcGFydF80YWM1ODk3Zi1mZDMwLTRhYTItYWM5NS05YjY3Yjg1MTFjZmUucG5n.png",
                     "corgi.jpg");
@@ -64,10 +64,20 @@ public class Endpoints extends Scene {
                 return currentState;
             }
             case "4" -> {
+                answerWithUploadFile(incomingMessage,
+                    YmlReader.getString(new String[]{"send_audio_message", lang.getValue()}) +
+                        YmlReader.getString(new String[]{"links", lang.getValue(), "send_upload_documentation"}),
+                    new File("src/main/resources/Audio_for_bot.mp3"));
 
+                return currentState;
             }
             case "5" -> {
+                answerWithUploadFile(incomingMessage,
+                    YmlReader.getString(new String[]{"send_video_message", lang.getValue()}) +
+                        YmlReader.getString(new String[]{"links", lang.getValue(), "send_upload_documentation"}),
+                    new File("src/main/resources/Video_for_bot.mp4"));
 
+                return currentState;
             }
             case "6" -> {
                 answerWithText(incomingMessage,
@@ -173,15 +183,22 @@ public class Endpoints extends Scene {
         var isYes = votes.get(0).getOptionVoters().contains(new PollUpdateMessageData.Voter(pollUpdate.getSenderData().getSender()));
         var isNo = votes.get(1).getOptionVoters().contains(new PollUpdateMessageData.Voter(pollUpdate.getSenderData().getSender()));
         var isNothing = votes.get(2).getOptionVoters().contains(new PollUpdateMessageData.Voter(pollUpdate.getSenderData().getSender()));
+        var messageText = "";
 
         if (isYes) {
-            answerWithText(pollUpdate, YmlReader.getString(new String[]{"poll_response", lang.getValue(), "if_yes"}));
+            messageText = YmlReader.getString(new String[]{"poll_response", lang.getValue(), "if_yes"});
         }
         if (isNo) {
-            answerWithText(pollUpdate, YmlReader.getString(new String[]{"poll_response", lang.getValue(), "if_no"}));
+            messageText = YmlReader.getString(new String[]{"poll_response", lang.getValue(), "if_no"});
         }
         if (isNothing) {
-            answerWithText(pollUpdate, YmlReader.getString(new String[]{"poll_response", lang.getValue(), "if_nothing"}));
+            messageText = YmlReader.getString(new String[]{"poll_response", lang.getValue(), "if_nothing"});
         }
+
+        greenApi.sending.sendMessage(
+            OutgoingMessage.builder()
+                .chatId(pollUpdate.getSenderData().getChatId())
+                .message(messageText)
+                .build());
     }
 }

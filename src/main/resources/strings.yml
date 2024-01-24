@@ -19,6 +19,12 @@ send_file_message:
 send_image_message:
   ru: "Это фото отправлено методом sendFileByUrl. Корги поднимет вам настроение!\n\nЧтобы узнать как работает метод, пройдите по ссылке\n"
   eng: "This image is sent via sendFileByUrl method. Hope a little corgi will lighten your mood!\n\nIf you want to know how the method works, follow the link\n"
+send_audio_message:
+  ru: "Это аудио отправлено методом sendFileByUpload.\n\nЧтобы узнать как работает метод, пройдите по ссылке\n"
+  eng: "This audio is sent via sendFileByUpload method.\n\nIf you want to know how the method works, follow the link\n"
+send_video_message:
+  ru: "Это видео отправлено методом sendFileByUpload.\n\nЧтобы узнать как работает метод, пройдите по ссылке\n"
+  eng: "This video is sent via sendFileByUpload method.\n\nIf you want to know how the method works, follow the link\n"
 send_contact_message:
   ru: "Следующий контакт будет отправлен методом sendContact. Это вы!\n\nЧтобы узнать как работает метод, пройдите по ссылке\n"
   eng: "The following contact to be sent via sendContact method. That is you!\n\nIf you want to know how the method works, follow the link\n"
@@ -33,8 +39,8 @@ send_link_message:
     with_preview: "This message was sent via the sendMessage method.\nThe sendMessage method https://greenapi.com/en/docs/api/sending/SendMessage/ allows you to send messages with a link, this message with a preview: "
     without_preview: "This message is without a preview https://greenapi.com/en/docs/api/sending/SendMessage/, to disable the preview you must specify the linkPreview field: false"
 send_poll_message:
-  ru: "Метод опроса https://green-api.com/docs/api/sending/SendPoll/ позволяет отправить опрос в чат, пользователи смогут сделать свой выбор нажав на выбранный пункт. Вы можете использовать оправ в качестве замены кнопкам, более подробно можно прочитать в статье"
-  eng: "The survey method https://greenapi.com/em/docs/api/sending/SendPoll/ allows you to send a survey to the chat, users will be able to make their choice by clicking on the selected item. You can use frames as a replacement for buttons, you can read more in the article"
+  ru: "Метод опроса https://green-api.com/docs/api/sending/SendPoll/ позволяет отправить опрос в чат, пользователи смогут сделать свой выбор нажав на выбранный пункт. Вы можете использовать опрос в качестве замены кнопкам, более подробно можно прочитать в статье"
+  eng: "The survey method https://greenapi.com/em/docs/api/sending/SendPoll/ allows you to send a poll to the chat, users will be able to make their choice by clicking on the selected item. You can use poll as a replacement for buttons, you can read more in the article"
 poll_name:
   ru: "Выберите вариант ответа ✔️\nНравится Вам работа демо чатбота?"
   eng: "Choose the answer option ✔️\nDo you like the work of the demo chat bot?"
@@ -65,12 +71,6 @@ send_avatar_message:
     avatar: "The GetAvatar https://greenapi.com/en/docs/api/service/GetAvatar/, method allows you to get the interlocutor's avatar,"
     avatar_exist: "Your avatar picture"
     avatar_not_exist: "You don't have an avatar"
-send_audio_message:
-  ru:
-  eng:
-send_video_message:
-  ru:
-  eng:
 create_group_message:
   ru: "Группа “Группа с демо чат ботом” создана ботом методом CreateGroup https://green-api.com/docs/api/groups/CreateGroup/, далее в группе была установлена аватарка методом SetGroupPicture https://green-api.com/docs/api/groups/SetGroupPicture/ и отправлено сообщение методом sendMessage https://green-api.com/docs/api/sending/SendMessage/.\n\nЧтобы узнать как работать с методами групп пройдите по ссылке https://green-api.com/docs/api/groups/"
   eng: "The group “Group with demo chat bot” was created by the bot using the CreateGroup method https://greenapi.com/en/docs/api/groups/CreateGroup/, then an avatar was set in the group using the SetGroupPicture method https://greenapi.com/en/docs/api/groups/SetGroupPicture/ and a message was sent using the sendMessage method https://greenapi.com/en/docs/api/sending/SendMessage/.\n\nTo learn how to work with group methods, follow the link https://greenapi.com/en/docs/api/groups/"
@@ -84,6 +84,7 @@ links:
   ru:
     send_text_documentation: "https://green-api.com/docs/api/sending/SendMessage/"
     send_file_documentation: "https://green-api.com/docs/api/sending/SendFileByUrl/"
+    send_upload_documentation: "https://green-api.com/docs/api/sending/SendFileByUpload/"
     send_contact_documentation: "https://green-api.com/docs/api/sending/SendContact/"
     send_location_documentation: "https://green-api.com/docs/api/sending/SendLocation/"
     send_avatar_documentation: "https://green-api.com/docs/api/service/GetAvatar/"
@@ -91,6 +92,7 @@ links:
   eng:
     send_text_documentation: "https://green-api.com/en/docs/api/sending/SendMessage/"
     send_file_documentation: "https://green-api.com/en/docs/api/sending/SendFileByUrl/"
+    send_upload_documentation: "https://green-api.com/en/docs/api/sending/SendFileByUpload/"
     send_contact_documentation: "https://green-api.com/en/docs/api/sending/SendContact/"
     send_location_documentation: "https://green-api.com/en/docs/api/sending/SendLocation/"
     send_avatar_documentation: "https://green-api.com/docs/api/service/GetAvatar/"

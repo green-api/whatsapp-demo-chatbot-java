@@ -13,7 +13,7 @@ public class BotStarter {
         var botFactory = context.getBean(BotFactory.class);
 
         var bot = botFactory.createBot(
-            "{{INSTANCE}}",
+            "{{INSTANCE_ID}}",
             "{{TOKEN}}");
 
         bot.setStartScene(new Start());
