@@ -13,12 +13,17 @@ import com.greenapi.client.pkg.models.request.OutgoingMessage;
 import com.greenapi.demoChatbot.util.Language;
 import com.greenapi.demoChatbot.util.SessionManager;
 import com.greenapi.demoChatbot.util.YmlReader;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Endpoints extends Scene {
+    @Value("${link_1}")
+    private String pngLink;
+    @Value("${link_2}")
+    private String jpgLink;
 
     @Override
     public State processIncomingMessage(MessageWebhook incomingMessage, State currentState) {
@@ -49,7 +54,7 @@ public class Endpoints extends Scene {
                 answerWithUrlFile(incomingMessage,
                     YmlReader.getString(new String[]{"send_file_message", lang.getValue()}) +
                         YmlReader.getString(new String[]{"links", lang.getValue(), "send_file_documentation"}),
-                    "https://images.rawpixel.com/image_png_1100/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIzLTExL3Jhd3BpeGVsb2ZmaWNlMTlfcGhvdG9fb2ZfY29yZ2lzX2luX2NocmlzdG1hc19zd2VhdGVyX2luX2FfcGFydF80YWM1ODk3Zi1mZDMwLTRhYTItYWM5NS05YjY3Yjg1MTFjZmUucG5n.png",
+                    pngLink,
                     "corgi.png");
 
                 return currentState;
@@ -58,7 +63,7 @@ public class Endpoints extends Scene {
                 answerWithUrlFile(incomingMessage,
                     YmlReader.getString(new String[]{"send_file_message", lang.getValue()}) +
                         YmlReader.getString(new String[]{"links", lang.getValue(), "send_file_documentation"}),
-                    "https://images.rawpixel.com/image_png_1100/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIzLTExL3Jhd3BpeGVsb2ZmaWNlMTlfcGhvdG9fb2ZfY29yZ2lzX2luX2NocmlzdG1hc19zd2VhdGVyX2luX2FfcGFydF80YWM1ODk3Zi1mZDMwLTRhYTItYWM5NS05YjY3Yjg1MTFjZmUucG5n.png",
+                    jpgLink,
                     "corgi.jpg");
 
                 return currentState;
