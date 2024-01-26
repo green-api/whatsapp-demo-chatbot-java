@@ -50,7 +50,27 @@ You can then run the program by clicking start in the IDE interface or entering 
 ```
 mvn clean install exec:java -Dexec.mainClass=com.greenapi.demoChatbot.BotStarter
 ```
-The bot must be running.
+This request will start the chatbot. The process begins with chatbot initialization, which includes changing the settings of the associated instance.
+
+The library [whatsapp-chatbot-java](https://github.com/green-api/whatsapp-chatbot-java) contains a mechanism for changing instance settings using the [SetSettings](https://green-api.com/en/docs/api/account/SetSettings/) method, which is launched when the chatbot is turned on.
+
+All settings for receiving notifications are disabled by default; the chatbot will enable the following settings:
+```
+     "incomingWebhook": "yes",
+     "outgoingMessageWebhook": "yes",
+     "outgoingAPIMessageWebhook": "yes",
+```
+which are responsible for receiving notifications about incoming and outgoing messages.
+
+The process of changing settings takes several minutes, during which time the instance will be unavailable. Messages sent to the chatbot during this time will not be processed.
+
+After the settings are applied, notifications about previously received incoming messages will be deleted. This process is also written in the library [whatsapp-chatbot-java](https://github.com/green-api/whatsapp-chatbot-java) and starts automatically after changing the settings.
+
+This is necessary so that the chatbot does not start processing messages from old chats.
+
+After changing the settings and deleting incoming notifications, the chatbot will begin to respond to messages as standard. In total, this process takes no more than 5 minutes.
+
+To stop the chatbot, use the keyboard shortcut `Ctrl + C` in the command line.
 
 ## Setting up a chatbot
 

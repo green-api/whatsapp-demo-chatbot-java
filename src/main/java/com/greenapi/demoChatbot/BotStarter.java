@@ -1,6 +1,7 @@
 package com.greenapi.demoChatbot;
 
 import com.greenapi.chatbot.pkg.BotFactory;
+import com.greenapi.client.pkg.models.request.InstanceSettingsReq;
 import com.greenapi.demoChatbot.scenes.Start;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -13,8 +14,14 @@ public class BotStarter {
         var botFactory = context.getBean(BotFactory.class);
 
         var bot = botFactory.createBot(
-            "{{INSTANCE_ID}}",
+            "{{InstanceID}}",
             "{{TOKEN}}");
+
+        bot.greenApi.account.setSetting(InstanceSettingsReq.builder()
+            .incomingWebhook("yes")
+            .outgoingMessageWebhook("yes")
+            .outgoingAPIMessageWebhook("yes")
+            .build());
 
         bot.setStartScene(new Start());
 
