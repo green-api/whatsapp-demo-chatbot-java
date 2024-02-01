@@ -14,6 +14,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <lombok.version>1.18.30</lombok.version>
         <whatsapp-chatbot-java.version>0.0.6</whatsapp-chatbot-java.version>
+        <spring-cloud-starter-config.version>4.0.4</spring-cloud-starter-config.version>
     </properties>
 
     <dependencies>
@@ -30,7 +31,7 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-config</artifactId>
-            <version>4.0.3</version>
+            <version>${spring-cloud-starter-config.version}</version>
         </dependency>
     </dependencies>
 

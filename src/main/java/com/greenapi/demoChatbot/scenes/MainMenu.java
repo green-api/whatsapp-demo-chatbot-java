@@ -38,6 +38,36 @@ public class MainMenu extends Scene {
 
                     return activateNextScene(currentState, new Endpoints());
                 }
+                case "3" -> {
+                    currentState.getData().put("lang", Language.HE);
+                    answerWithText(incomingMessage,
+                        YmlReader.getString(new String[]{"welcome_message", Language.HE.getValue()}) +
+                            incomingMessage.getSenderData().getSenderName() +
+                            YmlReader.getString(new String[]{"menu", Language.HE.getValue()})
+                    );
+
+                    return activateNextScene(currentState, new Endpoints());
+                }
+                case "4" -> {
+                    currentState.getData().put("lang", Language.ES);
+                    answerWithText(incomingMessage,
+                        YmlReader.getString(new String[]{"welcome_message", Language.ES.getValue()}) +
+                            incomingMessage.getSenderData().getSenderName() +
+                            YmlReader.getString(new String[]{"menu", Language.ES.getValue()})
+                    );
+
+                    return activateNextScene(currentState, new Endpoints());
+                }
+                case "5" -> {
+                    currentState.getData().put("lang", Language.AR);
+                    answerWithText(incomingMessage,
+                        YmlReader.getString(new String[]{"welcome_message", Language.AR.getValue()}) +
+                            incomingMessage.getSenderData().getSenderName() +
+                            YmlReader.getString(new String[]{"menu", Language.AR.getValue()})
+                    );
+
+                    return activateNextScene(currentState, new Endpoints());
+                }
                 default -> {
                     answerWithText(incomingMessage, YmlReader.getString(new String[]{"specify_language"}));
 

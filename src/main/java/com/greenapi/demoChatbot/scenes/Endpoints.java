@@ -10,12 +10,17 @@ import com.greenapi.client.pkg.models.notifications.messages.messageData.PollUpd
 import com.greenapi.client.pkg.models.request.ChangeGroupPictureReq;
 import com.greenapi.client.pkg.models.request.CreateGroupReq;
 import com.greenapi.client.pkg.models.request.OutgoingMessage;
+import com.greenapi.client.pkg.models.response.SetGroupPictureResp;
 import com.greenapi.demoChatbot.util.Language;
 import com.greenapi.demoChatbot.util.SessionManager;
 import com.greenapi.demoChatbot.util.YmlReader;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 
 import java.io.File;
+import java.nio.file.FileSystem;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -72,7 +77,7 @@ public class Endpoints extends Scene {
                 answerWithUploadFile(incomingMessage,
                     YmlReader.getString(new String[]{"send_audio_message", lang.getValue()}) +
                         YmlReader.getString(new String[]{"links", lang.getValue(), "send_upload_documentation"}),
-                    new File("src/main/resources/Audio_for_bot.mp3"));
+                    Paths.get("src/main/resources/assets/Audio_for_bot.mp3").toFile());
 
                 return currentState;
             }
@@ -80,7 +85,7 @@ public class Endpoints extends Scene {
                 answerWithUploadFile(incomingMessage,
                     YmlReader.getString(new String[]{"send_video_message", lang.getValue()}) +
                         YmlReader.getString(new String[]{"links", lang.getValue(), "send_upload_documentation"}),
-                    new File("src/main/resources/Video_for_bot.mp4"));
+                    Paths.get("src/main/resources/assets/Video_for_bot.mp4").toFile());
 
                 return currentState;
             }
@@ -106,40 +111,47 @@ public class Endpoints extends Scene {
                 return currentState;
             }
             case "8" -> {
-                answerWithText(incomingMessage, YmlReader.getString(new String[]{"send_poll_message", lang.getValue()}));
+                answerWithText(incomingMessage,
+                    YmlReader.getString(new String[]{"send_poll_message", lang.getValue()}) +
+                        YmlReader.getString(new String[]{"links", lang.getValue(), "send_poll_documentation"}));
 
                 var options = new ArrayList<Option>();
-                options.add(new Option(YmlReader.getString(new String[]{"poll_option", lang.getValue(), "o1"})));
-                options.add(new Option(YmlReader.getString(new String[]{"poll_option", lang.getValue(), "o2"})));
-                options.add(new Option(YmlReader.getString(new String[]{"poll_option", lang.getValue(), "o3"})));
+                options.add(new Option(YmlReader.getString(new String[]{"poll_option_1", lang.getValue()})));
+                options.add(new Option(YmlReader.getString(new String[]{"poll_option_2", lang.getValue()})));
+                options.add(new Option(YmlReader.getString(new String[]{"poll_option_3", lang.getValue()})));
 
-                answerWithPoll(incomingMessage, YmlReader.getString(new String[]{"poll_name", lang.getValue()}),
+                answerWithPoll(incomingMessage, YmlReader.getString(new String[]{"poll_question", lang.getValue()}),
                     options, false);
 
                 return currentState;
             }
             case "9" -> {
-                answerWithText(incomingMessage, YmlReader.getString(new String[]{"send_avatar_message", lang.getValue(), "avatar"}));
+                answerWithText(incomingMessage,
+                    YmlReader.getString(new String[]{"get_avatar_message", lang.getValue(), "avatar"}) +
+                        YmlReader.getString(new String[]{"links", lang.getValue(), "get_avatar_documentation"}));
 
                 var avatar = greenApi.service.getAvatar(incomingMessage.getSenderData().getChatId());
 
                 if (avatar.getBody().getUrlAvatar() != null) {
                     answerWithUrlFile(incomingMessage,
-                        YmlReader.getString(new String[]{"send_avatar_message", lang.getValue(), "avatar_exist"}),
+                        YmlReader.getString(new String[]{"avatar_found", lang.getValue()}),
                         avatar.getBody().getUrlAvatar(), "avatar");
                 } else {
                     answerWithText(incomingMessage,
-                        YmlReader.getString(new String[]{"send_avatar_message", lang.getValue(), "avatar_not_exist"}));
+                        YmlReader.getString(new String[]{"avatar_not_found", lang.getValue()}));
                 }
 
                 return currentState;
             }
             case "10" -> {
-                answerWithText(incomingMessage, YmlReader.getString(new String[]{"send_link_message", lang.getValue(), "with_preview"}));
+                answerWithText(incomingMessage,
+                    YmlReader.getString(new String[]{"send_link_message_preview", lang.getValue()}) +
+                        YmlReader.getString(new String[]{"links", lang.getValue(), "send_link_documentation"}));
 
                 greenApi.sending.sendMessage(OutgoingMessage.builder()
                     .chatId(incomingMessage.getSenderData().getChatId())
-                    .message(YmlReader.getString(new String[]{"send_link_message", lang.getValue(), "without_preview"}))
+                    .message(YmlReader.getString(new String[]{"send_link_message_no_preview", lang.getValue()}) +
+                        YmlReader.getString(new String[]{"links", lang.getValue(), "send_link_documentation"}))
                     .quotedMessageId(incomingMessage.getIdMessage())
                     .linkPreview(false)
                     .build());
@@ -152,15 +164,33 @@ public class Endpoints extends Scene {
                     .groupName(YmlReader.getString(new String[]{"group_name", lang.getValue()}))
                     .build());
 
-                greenApi.groups.setGroupPicture(ChangeGroupPictureReq.builder()
+                var setGroupPicture = greenApi.groups.setGroupPicture(ChangeGroupPictureReq.builder()
                     .groupId(group.getBody().getChatId())
-                    .file(new File("src/main/resources/img.png"))
+                    .file(Paths.get("src/main/resources/assets/Group_avatar.jpg").toFile())
                     .build());
 
-                greenApi.sending.sendMessage(OutgoingMessage.builder()
-                    .chatId(group.getBody().getChatId())
-                    .message(YmlReader.getString(new String[]{"create_group_message", lang.getValue()}))
-                    .build());
+                if (setGroupPicture.getStatusCode().is2xxSuccessful()) {
+                    if (setGroupPicture.getBody().getSetGroupPicture()) {
+                        greenApi.sending.sendMessage(OutgoingMessage.builder()
+                            .chatId(group.getBody().getChatId())
+                            .message(YmlReader.getString(new String[]{"send_group_message", lang.getValue()}) +
+                                YmlReader.getString(new String[]{"links", lang.getValue(), "create_group_documentation"}))
+                            .build());
+                    } else {
+                        greenApi.sending.sendMessage(OutgoingMessage.builder()
+                            .chatId(group.getBody().getChatId())
+                            .message(YmlReader.getString(new String[]{"send_group_message_set_picture_false", lang.getValue()}) +
+                                YmlReader.getString(new String[]{"links", lang.getValue(), "create_group_documentation"}))
+                            .build());
+                    }
+                }
+            }
+            case "12" -> {
+                answerWithText(incomingMessage,
+                    YmlReader.getString(new String[]{"send_quoted_message", lang.getValue()}) +
+                        YmlReader.getString(new String[]{"links", lang.getValue(), "send_quoted_message_documentation"}));
+
+                return currentState;
             }
             case "stop", "стоп", "Stop", "Стоп" -> {
                 answerWithText(incomingMessage,
@@ -191,13 +221,13 @@ public class Endpoints extends Scene {
         var messageText = "";
 
         if (isYes) {
-            messageText = YmlReader.getString(new String[]{"poll_response", lang.getValue(), "if_yes"});
+            messageText = YmlReader.getString(new String[]{"poll_answer_1", lang.getValue()});
         }
         if (isNo) {
-            messageText = YmlReader.getString(new String[]{"poll_response", lang.getValue(), "if_no"});
+            messageText = YmlReader.getString(new String[]{"poll_answer_2", lang.getValue()});
         }
         if (isNothing) {
-            messageText = YmlReader.getString(new String[]{"poll_response", lang.getValue(), "if_nothing"});
+            messageText = YmlReader.getString(new String[]{"poll_answer_3", lang.getValue()});
         }
 
         greenApi.sending.sendMessage(

@@ -9,14 +9,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class BotStarter {
-    @Value("${sapi_user_id}")
-    private static String instanceId;
-    @Value("${sapi_user_token}")
-    private static String token;
 
     public static void main(String[] args) {
         var context = SpringApplication.run(BotStarter.class, args);
         var botFactory = context.getBean(BotFactory.class);
+        var instanceId = context.getEnvironment().getProperty("sapi_user_id");
+        var token = context.getEnvironment().getProperty("sapi_user_token");
 
         var bot = botFactory.createBot(instanceId, token);
 
