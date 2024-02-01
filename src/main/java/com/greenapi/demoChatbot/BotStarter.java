@@ -3,7 +3,6 @@ package com.greenapi.demoChatbot;
 import com.greenapi.chatbot.pkg.BotFactory;
 import com.greenapi.client.pkg.models.request.InstanceSettingsReq;
 import com.greenapi.demoChatbot.scenes.Start;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

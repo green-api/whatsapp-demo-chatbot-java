@@ -15,6 +15,7 @@
         <lombok.version>1.18.30</lombok.version>
         <whatsapp-chatbot-java.version>0.0.6</whatsapp-chatbot-java.version>
         <spring-cloud-starter-config.version>4.0.4</spring-cloud-starter-config.version>
+        <spring-cloud-config-server.version>4.0.4</spring-cloud-config-server.version>
     </properties>
 
     <dependencies>
@@ -27,6 +28,11 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>${lombok.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-config-server</artifactId>
+            <version>${spring-cloud-config-server.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>

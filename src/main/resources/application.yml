@@ -1,17 +1,11 @@
 green-api:
   host: https://api.green-api.com
   hostMedia: https://media.green-api.com
+
 spring:
-  config:
-    import=optional:configserver:
-  cloud:
+  application:
+    name: sw-chatbot-java-7103
+  spring:
     config:
-      uri: http://sw-prod-gateway.ru-central1.internal:8081
-      profile: 7103,7103006
-      name: sw-chatbot-java-7103
-      fail-fast: false
-#      import-check:
-#        enabled: false
-#sapi_user_id: 1101848919
-#sapi_user_token: fe0453b47e1b403c8d88ce881291ea002292b3037ae045bcb2
+      import: optional:configserver:http://sw-prod-gateway.ru-central1.internal:8081
 
