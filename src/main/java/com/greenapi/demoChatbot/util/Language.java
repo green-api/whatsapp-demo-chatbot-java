@@ -5,7 +5,8 @@ public enum Language {
     RU("ru"),
     HE("he"),
     ES("es"),
-    AR("ar");
+    AR("ar"),
+    KZ("kz");
 
     private final String value;
 

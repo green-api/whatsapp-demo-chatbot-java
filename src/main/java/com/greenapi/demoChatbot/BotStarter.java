@@ -12,6 +12,7 @@ public class BotStarter {
     public static void main(String[] args) {
         var context = SpringApplication.run(BotStarter.class, args);
         var botFactory = context.getBean(BotFactory.class);
+        var startScene = context.getBean(Start.class);
         var instanceId = context.getEnvironment().getProperty("sapi_user_id");
         var token = context.getEnvironment().getProperty("sapi_user_token");
 
@@ -23,7 +24,7 @@ public class BotStarter {
             .outgoingAPIMessageWebhook("yes")
             .build());
 
-        bot.setStartScene(new Start());
+        bot.setStartScene(startScene);
 
         bot.startReceivingNotifications();
     }

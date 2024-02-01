@@ -6,8 +6,15 @@ import com.greenapi.client.pkg.models.notifications.MessageWebhook;
 import com.greenapi.demoChatbot.util.Language;
 import com.greenapi.demoChatbot.util.SessionManager;
 import com.greenapi.demoChatbot.util.YmlReader;
+import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class MainMenu extends Scene {
+
+    @Autowired
+    private Endpoints endpointsScene;
 
     @Override
     public State processIncomingMessage(MessageWebhook incomingMessage, State currentState) {
@@ -19,54 +26,22 @@ public class MainMenu extends Scene {
         if (messageText.isPresent()) {
             switch (messageText.get()) {
                 case "1" -> {
-                    currentState.getData().put("lang", Language.ENG);
-                    answerWithText(incomingMessage,
-                        YmlReader.getString(new String[]{"welcome_message", Language.ENG.getValue()}) +
-                            incomingMessage.getSenderData().getSenderName() +
-                            YmlReader.getString(new String[]{"menu", Language.ENG.getValue()})
-                    );
-
-                    return activateNextScene(currentState, new Endpoints());
+                    return sendMainMenu(incomingMessage, currentState, Language.ENG);
                 }
                 case "2" -> {
-                    currentState.getData().put("lang", Language.RU);
-                    answerWithText(incomingMessage,
-                        YmlReader.getString(new String[]{"welcome_message", Language.RU.getValue()}) +
-                            incomingMessage.getSenderData().getSenderName() +
-                            YmlReader.getString(new String[]{"menu", Language.RU.getValue()})
-                    );
-
-                    return activateNextScene(currentState, new Endpoints());
+                    return sendMainMenu(incomingMessage, currentState, Language.KZ);
                 }
                 case "3" -> {
-                    currentState.getData().put("lang", Language.HE);
-                    answerWithText(incomingMessage,
-                        YmlReader.getString(new String[]{"welcome_message", Language.HE.getValue()}) +
-                            incomingMessage.getSenderData().getSenderName() +
-                            YmlReader.getString(new String[]{"menu", Language.HE.getValue()})
-                    );
-
-                    return activateNextScene(currentState, new Endpoints());
+                    return sendMainMenu(incomingMessage, currentState, Language.RU);
                 }
                 case "4" -> {
-                    currentState.getData().put("lang", Language.ES);
-                    answerWithText(incomingMessage,
-                        YmlReader.getString(new String[]{"welcome_message", Language.ES.getValue()}) +
-                            incomingMessage.getSenderData().getSenderName() +
-                            YmlReader.getString(new String[]{"menu", Language.ES.getValue()})
-                    );
-
-                    return activateNextScene(currentState, new Endpoints());
+                    return sendMainMenu(incomingMessage, currentState, Language.HE);
                 }
                 case "5" -> {
-                    currentState.getData().put("lang", Language.AR);
-                    answerWithText(incomingMessage,
-                        YmlReader.getString(new String[]{"welcome_message", Language.AR.getValue()}) +
-                            incomingMessage.getSenderData().getSenderName() +
-                            YmlReader.getString(new String[]{"menu", Language.AR.getValue()})
-                    );
-
-                    return activateNextScene(currentState, new Endpoints());
+                    return sendMainMenu(incomingMessage, currentState, Language.ES);
+                }
+                case "6" -> {
+                    return sendMainMenu(incomingMessage, currentState, Language.AR);
                 }
                 default -> {
                     answerWithText(incomingMessage, YmlReader.getString(new String[]{"specify_language"}));
@@ -77,5 +52,16 @@ public class MainMenu extends Scene {
         }
 
         return currentState;
+    }
+
+    private State sendMainMenu(MessageWebhook incomingMessage, State currentState, Language language) {
+        currentState.getData().put("lang", language);
+        answerWithText(incomingMessage,
+            YmlReader.getString(new String[]{"welcome_message", language.getValue()}) +
+                incomingMessage.getSenderData().getSenderName() + "\n" +
+                YmlReader.getString(new String[]{"menu",language.getValue()})
+        );
+
+        return activateNextScene(currentState, endpointsScene);
     }
 }

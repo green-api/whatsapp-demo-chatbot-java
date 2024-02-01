@@ -10,25 +10,23 @@ import com.greenapi.client.pkg.models.notifications.messages.messageData.PollUpd
 import com.greenapi.client.pkg.models.request.ChangeGroupPictureReq;
 import com.greenapi.client.pkg.models.request.CreateGroupReq;
 import com.greenapi.client.pkg.models.request.OutgoingMessage;
-import com.greenapi.client.pkg.models.response.SetGroupPictureResp;
 import com.greenapi.demoChatbot.util.Language;
 import com.greenapi.demoChatbot.util.SessionManager;
 import com.greenapi.demoChatbot.util.YmlReader;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
+import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
+import org.springframework.stereotype.Component;
 
-import java.io.File;
-import java.nio.file.FileSystem;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
 public class Endpoints extends Scene {
-    @Value("${link_1}")
-    private String pngLink;
-    @Value("${link_2}")
-    private String jpgLink;
+
+    @Autowired
+    private Environment environment;
 
     @Override
     public State processIncomingMessage(MessageWebhook incomingMessage, State currentState) {
@@ -59,8 +57,8 @@ public class Endpoints extends Scene {
                 answerWithUrlFile(incomingMessage,
                     YmlReader.getString(new String[]{"send_file_message", lang.getValue()}) +
                         YmlReader.getString(new String[]{"links", lang.getValue(), "send_file_documentation"}),
-                    pngLink,
-                    "corgi.png");
+                    environment.getProperty("link_1"),
+                    "corgi.pdf");
 
                 return currentState;
             }
@@ -68,24 +66,25 @@ public class Endpoints extends Scene {
                 answerWithUrlFile(incomingMessage,
                     YmlReader.getString(new String[]{"send_file_message", lang.getValue()}) +
                         YmlReader.getString(new String[]{"links", lang.getValue(), "send_file_documentation"}),
-                    jpgLink,
+                    environment.getProperty("link_2"),
                     "corgi.jpg");
 
                 return currentState;
             }
             case "4" -> {
-                answerWithUploadFile(incomingMessage,
-                    YmlReader.getString(new String[]{"send_audio_message", lang.getValue()}) +
-                        YmlReader.getString(new String[]{"links", lang.getValue(), "send_upload_documentation"}),
-                    Paths.get("src/main/resources/assets/Audio_for_bot.mp3").toFile());
+                answerWithText(incomingMessage, YmlReader.getString(new String[]{"send_audio_message", lang.getValue()}) +
+                        YmlReader.getString(new String[]{"links", lang.getValue(), "send_file_documentation"}));
+
+                answerWithUrlFile(incomingMessage, "", environment.getProperty("link_3"), "audio.mp3");
 
                 return currentState;
             }
             case "5" -> {
-                answerWithUploadFile(incomingMessage,
+                answerWithUrlFile(incomingMessage,
                     YmlReader.getString(new String[]{"send_video_message", lang.getValue()}) +
-                        YmlReader.getString(new String[]{"links", lang.getValue(), "send_upload_documentation"}),
-                    Paths.get("src/main/resources/assets/Video_for_bot.mp4").toFile());
+                        YmlReader.getString(new String[]{"links", lang.getValue(), "send_file_documentation"}),
+                    environment.getProperty("link_4"),
+                    "video.mp4");
 
                 return currentState;
             }
@@ -112,7 +111,7 @@ public class Endpoints extends Scene {
             }
             case "8" -> {
                 answerWithText(incomingMessage,
-                    YmlReader.getString(new String[]{"send_poll_message", lang.getValue()}) +
+                    YmlReader.getString(new String[]{"send_poll_message", lang.getValue()}) + "\n" +
                         YmlReader.getString(new String[]{"links", lang.getValue(), "send_poll_documentation"}));
 
                 var options = new ArrayList<Option>();
