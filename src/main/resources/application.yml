@@ -7,3 +7,5 @@ spring:
   spring:
     config:
       import: optional:configserver:http://sw-prod-gateway.ru-central1.internal:8081
+    profiles:
+      active: 7103,7103006
