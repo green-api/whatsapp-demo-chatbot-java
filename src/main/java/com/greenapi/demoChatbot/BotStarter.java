@@ -13,8 +13,8 @@ public class BotStarter {
         var context = SpringApplication.run(BotStarter.class, args);
         var botFactory = context.getBean(BotFactory.class);
         var startScene = context.getBean(Start.class);
-        var instanceId = context.getEnvironment().getProperty("sapi_user_id");
-        var token = context.getEnvironment().getProperty("sapi_user_token");
+        var instanceId = context.getEnvironment().getProperty("user_id");
+        var token = context.getEnvironment().getProperty("api_token_id");
 
         var bot = botFactory.createBot(instanceId, token);
 

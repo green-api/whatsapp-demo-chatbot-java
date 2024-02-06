@@ -1,16 +1,9 @@
 green-api:
-  host: https://api.green-api.com
-  hostMedia: https://media.green-api.com
+  host: https://7103.api.greenapi.com
+  hostMedia: https://7103.media.greenapi.com
 spring:
   application:
     name: sw-chatbot-java-7103
   spring:
     config:
       import: optional:configserver:http://sw-prod-gateway.ru-central1.internal:8081
-
-#sapi_user_id: 1101848919
-#sapi_user_token: fe0453b47e1b403c8d88ce881291ea002292b3037ae045bcb2
-#link_1: https://images.rawpixel.com/image_png_1100/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIzLTExL3Jhd3BpeGVsb2ZmaWNlMTlfcGhvdG9fb2ZfY29yZ2lzX2luX2NocmlzdG1hc19zd2VhdGVyX2luX2FfcGFydF80YWM1ODk3Zi1mZDMwLTRhYTItYWM5NS05YjY3Yjg1MTFjZmUucG5n.png
-#link_2: https://images.rawpixel.com/image_png_1100/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIzLTExL3Jhd3BpeGVsb2ZmaWNlMTlfcGhvdG9fb2ZfY29yZ2lzX2luX2NocmlzdG1hc19zd2VhdGVyX2luX2FfcGFydF80YWM1ODk3Zi1mZDMwLTRhYTItYWM5NS05YjY3Yjg1MTFjZmUucG5n.png
-#link_3: https://getfile.dokpub.com/yandex/get/https://disk.yandex.ru/d/QOdFbip7LVQ5xQ
-#link_4: https://getfile.dokpub.com/yandex/get/https://disk.yandex.ru/i/dEC_wF7OvrKGFw
