@@ -20,6 +20,7 @@ import org.springframework.stereotype.Component;
 
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Component
@@ -95,7 +96,7 @@ public class Endpoints extends Scene {
 
                 answerWithContact(incomingMessage, Contact.builder()
                     .firstName(incomingMessage.getSenderData().getSenderName())
-                    .phoneContact(Long.valueOf(incomingMessage.getSenderData().getChatId().replaceAll("@c\\.us", "")))
+                    .phoneContact(Long.valueOf(incomingMessage.getSenderData().getSender().replaceAll("@c\\.us", "")))
                     .build());
 
                 return currentState;
@@ -159,7 +160,7 @@ public class Endpoints extends Scene {
             }
             case "11" -> {
                 var group = greenApi.groups.createGroup(CreateGroupReq.builder()
-                    .chatIds(List.of(incomingMessage.getSenderData().getChatId()))
+                    .chatIds(Collections.singletonList(incomingMessage.getSenderData().getSender()))
                     .groupName(YmlReader.getString(new String[]{"group_name", lang.getValue()}))
                     .build());
 

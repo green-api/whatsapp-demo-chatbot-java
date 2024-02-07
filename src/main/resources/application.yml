@@ -2,10 +2,5 @@ green-api:
   host: https://7103.api.greenapi.com
   hostMedia: https://7103.media.greenapi.com
 spring:
-  application:
-    name: sw-chatbot-java-7103
-  spring:
-    config:
-      import: optional:configserver:http://sw-prod-gateway.ru-central1.internal:8081
-    profiles:
-      active: 7103,7103006
+  config:
+    import: optional:http://sw-prod-gateway.ru-central1.internal:8081/sw-chatbot-java-7103.yml
