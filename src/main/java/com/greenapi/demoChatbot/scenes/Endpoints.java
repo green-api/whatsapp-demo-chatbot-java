@@ -50,7 +50,8 @@ public class Endpoints extends Scene {
             case "1" -> {
                 answerWithText(incomingMessage,
                     YmlReader.getString(new String[]{"send_text_message", lang.getValue()}) +
-                        YmlReader.getString(new String[]{"links", lang.getValue(), "send_text_documentation"}));
+                        YmlReader.getString(new String[]{"links", lang.getValue(), "send_text_documentation"}),
+                    false);
 
                 return currentState;
             }
@@ -59,7 +60,8 @@ public class Endpoints extends Scene {
                     YmlReader.getString(new String[]{"send_file_message", lang.getValue()}) +
                         YmlReader.getString(new String[]{"links", lang.getValue(), "send_file_documentation"}),
                     environment.getProperty("link_1"),
-                    "corgi.pdf");
+                    "corgi.pdf",
+                    false);
 
                 return currentState;
             }
@@ -68,13 +70,14 @@ public class Endpoints extends Scene {
                     YmlReader.getString(new String[]{"send_file_message", lang.getValue()}) +
                         YmlReader.getString(new String[]{"links", lang.getValue(), "send_file_documentation"}),
                     environment.getProperty("link_2"),
-                    "corgi.jpg");
+                    "corgi.jpg",
+                    false);
 
                 return currentState;
             }
             case "4" -> {
                 answerWithText(incomingMessage, YmlReader.getString(new String[]{"send_audio_message", lang.getValue()}) +
-                        YmlReader.getString(new String[]{"links", lang.getValue(), "send_file_documentation"}));
+                        YmlReader.getString(new String[]{"links", lang.getValue(), "send_file_documentation"}), false);
 
                 answerWithUrlFile(incomingMessage, "", environment.getProperty("link_3"), "audio.mp3");
 
@@ -85,35 +88,39 @@ public class Endpoints extends Scene {
                     YmlReader.getString(new String[]{"send_video_message", lang.getValue()}) +
                         YmlReader.getString(new String[]{"links", lang.getValue(), "send_file_documentation"}),
                     environment.getProperty("link_4"),
-                    "video.mp4");
+                    "video.mp4", false);
 
                 return currentState;
             }
             case "6" -> {
                 answerWithText(incomingMessage,
                     YmlReader.getString(new String[]{"send_contact_message", lang.getValue()}) +
-                        YmlReader.getString(new String[]{"links", lang.getValue(), "send_contact_documentation"}));
+                        YmlReader.getString(new String[]{"links", lang.getValue(), "send_contact_documentation"}),
+                    false);
 
                 answerWithContact(incomingMessage, Contact.builder()
                     .firstName(incomingMessage.getSenderData().getSenderName())
                     .phoneContact(Long.valueOf(incomingMessage.getSenderData().getSender().replaceAll("@c\\.us", "")))
-                    .build());
+                    .build(), false);
 
                 return currentState;
             }
             case "7" -> {
                 answerWithText(incomingMessage,
                     YmlReader.getString(new String[]{"send_location_message", lang.getValue()}) +
-                        YmlReader.getString(new String[]{"links", lang.getValue(), "send_location_documentation"}));
+                        YmlReader.getString(new String[]{"links", lang.getValue(), "send_location_documentation"}),
+                    false);
 
-                answerWithLocation(incomingMessage, "", "", 35.888171, 14.440230);
+                answerWithLocation(incomingMessage, "", "", 35.888171, 14.440230,
+                    false);
 
                 return currentState;
             }
             case "8" -> {
                 answerWithText(incomingMessage,
                     YmlReader.getString(new String[]{"send_poll_message", lang.getValue()}) + "\n" +
-                        YmlReader.getString(new String[]{"links", lang.getValue(), "send_poll_documentation"}));
+                        YmlReader.getString(new String[]{"links", lang.getValue(), "send_poll_documentation"}),
+                    false);
 
                 var options = new ArrayList<Option>();
                 options.add(new Option(YmlReader.getString(new String[]{"poll_option_1", lang.getValue()})));
@@ -128,17 +135,18 @@ public class Endpoints extends Scene {
             case "9" -> {
                 answerWithText(incomingMessage,
                     YmlReader.getString(new String[]{"get_avatar_message", lang.getValue(), "avatar"}) +
-                        YmlReader.getString(new String[]{"links", lang.getValue(), "get_avatar_documentation"}));
+                        YmlReader.getString(new String[]{"links", lang.getValue(), "get_avatar_documentation"}),
+                    false);
 
                 var avatar = greenApi.service.getAvatar(incomingMessage.getSenderData().getChatId());
 
                 if (avatar.getBody().getUrlAvatar() != null) {
                     answerWithUrlFile(incomingMessage,
                         YmlReader.getString(new String[]{"avatar_found", lang.getValue()}),
-                        avatar.getBody().getUrlAvatar(), "avatar");
+                        avatar.getBody().getUrlAvatar(), "avatar", false);
                 } else {
                     answerWithText(incomingMessage,
-                        YmlReader.getString(new String[]{"avatar_not_found", lang.getValue()}));
+                        YmlReader.getString(new String[]{"avatar_not_found", lang.getValue()}), false);
                 }
 
                 return currentState;
@@ -146,13 +154,13 @@ public class Endpoints extends Scene {
             case "10" -> {
                 answerWithText(incomingMessage,
                     YmlReader.getString(new String[]{"send_link_message_preview", lang.getValue()}) +
-                        YmlReader.getString(new String[]{"links", lang.getValue(), "send_link_documentation"}));
+                        YmlReader.getString(new String[]{"links", lang.getValue(), "send_link_documentation"}),
+                    false);
 
                 greenApi.sending.sendMessage(OutgoingMessage.builder()
                     .chatId(incomingMessage.getSenderData().getChatId())
                     .message(YmlReader.getString(new String[]{"send_link_message_no_preview", lang.getValue()}) +
                         YmlReader.getString(new String[]{"links", lang.getValue(), "send_link_documentation"}))
-                    .quotedMessageId(incomingMessage.getIdMessage())
                     .linkPreview(false)
                     .build());
 
@@ -171,17 +179,11 @@ public class Endpoints extends Scene {
 
                 if (setGroupPicture.getStatusCode().is2xxSuccessful()) {
                     if (setGroupPicture.getBody().getSetGroupPicture()) {
-                        greenApi.sending.sendMessage(OutgoingMessage.builder()
-                            .chatId(group.getBody().getChatId())
-                            .message(YmlReader.getString(new String[]{"send_group_message", lang.getValue()}) +
-                                YmlReader.getString(new String[]{"links", lang.getValue(), "create_group_documentation"}))
-                            .build());
+                        answerWithText(incomingMessage, YmlReader.getString(new String[]{"send_group_message", lang.getValue()}) +
+                            YmlReader.getString(new String[]{"links", lang.getValue(), "create_group_documentation"}), false);
                     } else {
-                        greenApi.sending.sendMessage(OutgoingMessage.builder()
-                            .chatId(group.getBody().getChatId())
-                            .message(YmlReader.getString(new String[]{"send_group_message_set_picture_false", lang.getValue()}) +
-                                YmlReader.getString(new String[]{"links", lang.getValue(), "create_group_documentation"}))
-                            .build());
+                        answerWithText(incomingMessage, YmlReader.getString(new String[]{"send_group_message_set_picture_false", lang.getValue()}) +
+                            YmlReader.getString(new String[]{"links", lang.getValue(), "create_group_documentation"}), false);
                     }
                 }
             }
@@ -218,8 +220,8 @@ public class Endpoints extends Scene {
         var isYes = votes.get(0).getOptionVoters().contains(new PollUpdateMessageData.Voter(pollUpdate.getSenderData().getSender()));
         var isNo = votes.get(1).getOptionVoters().contains(new PollUpdateMessageData.Voter(pollUpdate.getSenderData().getSender()));
         var isNothing = votes.get(2).getOptionVoters().contains(new PollUpdateMessageData.Voter(pollUpdate.getSenderData().getSender()));
-        var messageText = "";
 
+        var messageText = "";
         if (isYes) {
             messageText = YmlReader.getString(new String[]{"poll_answer_1", lang.getValue()});
         }
@@ -229,11 +231,6 @@ public class Endpoints extends Scene {
         if (isNothing) {
             messageText = YmlReader.getString(new String[]{"poll_answer_3", lang.getValue()});
         }
-
-        greenApi.sending.sendMessage(
-            OutgoingMessage.builder()
-                .chatId(pollUpdate.getSenderData().getChatId())
-                .message(messageText)
-                .build());
+        answerWithText(pollUpdate, messageText, false);
     }
 }

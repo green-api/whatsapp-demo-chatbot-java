@@ -16,7 +16,7 @@ public class Start extends Scene {
     @Override
     public State processIncomingMessage(MessageWebhook incomingMessage, State currentState) {
 
-        answerWithText(incomingMessage, YmlReader.getString(new String[]{"select_language"}));
+        answerWithText(incomingMessage, YmlReader.getString(new String[]{"select_language"}), false);
 
         return activateNextScene(currentState, mainMenuScene);
     }

@@ -44,7 +44,7 @@ public class MainMenu extends Scene {
                     return sendMainMenu(incomingMessage, currentState, Language.AR);
                 }
                 default -> {
-                    answerWithText(incomingMessage, YmlReader.getString(new String[]{"specify_language"}));
+                    answerWithText(incomingMessage, YmlReader.getString(new String[]{"specify_language"}), false);
 
                     return currentState;
                 }
@@ -59,7 +59,7 @@ public class MainMenu extends Scene {
         answerWithText(incomingMessage,
             YmlReader.getString(new String[]{"welcome_message", language.getValue()}) +
                 incomingMessage.getSenderData().getSenderName() + "\n" +
-                YmlReader.getString(new String[]{"menu",language.getValue()})
+                YmlReader.getString(new String[]{"menu",language.getValue()}), false
         );
 
         return activateNextScene(currentState, endpointsScene);

@@ -22,6 +22,8 @@ public class BotStarter {
             .incomingWebhook("yes")
             .outgoingMessageWebhook("yes")
             .outgoingAPIMessageWebhook("yes")
+            .pollMessageWebhook("yes")
+            .markIncomingMessagesReaded("yes")
             .build());
 
         bot.setStartScene(startScene);
