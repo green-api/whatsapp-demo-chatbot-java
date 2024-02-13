@@ -13,7 +13,6 @@ import com.greenapi.demoChatbot.util.SessionManager;
 import com.greenapi.demoChatbot.util.YmlReader;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 

@@ -7,13 +7,10 @@ import com.greenapi.demoChatbot.util.Language;
 import com.greenapi.demoChatbot.util.SessionManager;
 import com.greenapi.demoChatbot.util.YmlReader;
 import lombok.AllArgsConstructor;
-import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
-import java.net.URI;
 import java.nio.file.Paths;
 
 @Component
@@ -80,7 +77,7 @@ public class MainMenu extends Scene {
         answerWithUploadFile(incomingMessage, welcomeFile,
             YmlReader.getString(new String[]{"welcome_message", language.getValue()}) +
                 incomingMessage.getSenderData().getSenderName() + "\n" +
-                YmlReader.getString(new String[]{"menu",language.getValue()}), false
+                YmlReader.getString(new String[]{"menu", language.getValue()}), false
         );
 
         return activateNextScene(currentState, endpointsScene);
