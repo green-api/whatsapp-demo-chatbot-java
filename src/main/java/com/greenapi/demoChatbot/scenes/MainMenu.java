@@ -40,10 +40,10 @@ public class MainMenu extends Scene {
                         return sendMainMenu(incomingMessage, currentState, Language.RU);
                     }
                     case "4" -> {
-                        return sendMainMenu(incomingMessage, currentState, Language.HE);
+                        return sendMainMenu(incomingMessage, currentState, Language.ES);
                     }
                     case "5" -> {
-                        return sendMainMenu(incomingMessage, currentState, Language.ES);
+                        return sendMainMenu(incomingMessage, currentState, Language.HE);
                     }
                     case "6" -> {
                         return sendMainMenu(incomingMessage, currentState, Language.AR);
