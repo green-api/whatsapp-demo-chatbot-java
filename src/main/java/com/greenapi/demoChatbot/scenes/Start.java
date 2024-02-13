@@ -15,9 +15,15 @@ public class Start extends Scene {
 
     @Override
     public State processIncomingMessage(MessageWebhook incomingMessage, State currentState) {
+        try {
 
-        answerWithText(incomingMessage, YmlReader.getString(new String[]{"select_language"}), false);
+            answerWithText(incomingMessage, YmlReader.getString(new String[]{"select_language"}), false);
 
-        return activateNextScene(currentState, mainMenuScene);
+            return activateNextScene(currentState, mainMenuScene);
+
+        } catch (Exception e) {
+            answerWithText(incomingMessage, YmlReader.getString(new String[]{"sorry_message"}));
+            return currentState;
+        }
     }
 }
