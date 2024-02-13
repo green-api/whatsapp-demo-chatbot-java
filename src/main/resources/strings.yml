@@ -1,4 +1,4 @@
-select_language: "*1* - English \n*2* - Қазақша\n*3* - Русский\n*4* - Español\n*עברית - *5"
+select_language: "*1* - English \n*2* - Қазақша\n*3* - Русский\n*4* - Español\n*5* - עברית"
 specify_language: "Please choose a language for further conversation\n*1* - English \n*2* - Қазақша\n*3* - Русский\n*4* - Español\n*5* - עברית"
 please_use_text: "Please enter a text message for further conversation with bot\n"
 welcome_message:
