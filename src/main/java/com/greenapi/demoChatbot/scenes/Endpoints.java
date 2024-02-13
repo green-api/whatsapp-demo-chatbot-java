@@ -11,6 +11,8 @@ import com.greenapi.client.pkg.models.request.OutgoingMessage;
 import com.greenapi.demoChatbot.util.Language;
 import com.greenapi.demoChatbot.util.SessionManager;
 import com.greenapi.demoChatbot.util.YmlReader;
+import lombok.AllArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
@@ -19,17 +21,19 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 
 @Component
+@AllArgsConstructor
+@Log4j2
 public class Endpoints extends Scene {
 
-    @Autowired
     private Environment environment;
-    @Autowired
+
     private CreateGroup createGroupScene;
 
     @Override
     public State processIncomingMessage(MessageWebhook incomingMessage, State currentState) {
         try {
             if (SessionManager.isSessionExpired(currentState)) {
+                answerWithText(incomingMessage, "session expired");
                 return activateStartScene(currentState);
             }
 
@@ -38,6 +42,7 @@ public class Endpoints extends Scene {
 
             if (incomingMessage instanceof PollUpdateMessageWebhook pollUpdate) {
                 processPollUpdate(pollUpdate, lang);
+                return currentState;
             }
 
             if (text.isEmpty()) {
@@ -50,7 +55,7 @@ public class Endpoints extends Scene {
                         YmlReader.getString(new String[]{"send_text_message", lang.getValue()}) +
                             YmlReader.getString(new String[]{"links", lang.getValue(), "send_text_documentation"}),
                         false);
-                    ;
+                    return currentState;
                 }
                 case "2" -> {
                     answerWithUrlFile(incomingMessage,
@@ -59,7 +64,7 @@ public class Endpoints extends Scene {
                         environment.getProperty("link_1"),
                         "corgi.pdf",
                         false);
-                    ;
+                    return currentState;
                 }
                 case "3" -> {
                     answerWithUrlFile(incomingMessage,
@@ -68,14 +73,14 @@ public class Endpoints extends Scene {
                         environment.getProperty("link_2"),
                         "corgi.jpg",
                         false);
-                    ;
+                    return currentState;
                 }
                 case "4" -> {
                     answerWithText(incomingMessage, YmlReader.getString(new String[]{"send_audio_message", lang.getValue()}) +
                         YmlReader.getString(new String[]{"links", lang.getValue(), "send_file_documentation"}), false);
 
-                    answerWithUrlFile(incomingMessage, "", environment.getProperty("link_3"), "audio.mp3");
-                    ;
+                    answerWithUrlFile(incomingMessage, "", environment.getProperty("link_3"), "audio.mp3", false);
+                    return currentState;
                 }
                 case "5" -> {
                     answerWithUrlFile(incomingMessage,
@@ -83,7 +88,7 @@ public class Endpoints extends Scene {
                             YmlReader.getString(new String[]{"links", lang.getValue(), "send_file_documentation"}),
                         environment.getProperty("link_4"),
                         "video.mp4", false);
-                    ;
+                    return currentState;
                 }
                 case "6" -> {
                     answerWithText(incomingMessage,
@@ -95,7 +100,7 @@ public class Endpoints extends Scene {
                         .firstName(incomingMessage.getSenderData().getSenderName())
                         .phoneContact(Long.valueOf(incomingMessage.getSenderData().getSender().replaceAll("@c\\.us", "")))
                         .build(), false);
-                    ;
+                    return currentState;
                 }
                 case "7" -> {
                     answerWithText(incomingMessage,
@@ -105,7 +110,7 @@ public class Endpoints extends Scene {
 
                     answerWithLocation(incomingMessage, "", "", 35.888171, 14.440230,
                         false);
-                    ;
+                    return currentState;
                 }
                 case "8" -> {
                     answerWithText(incomingMessage,
@@ -120,7 +125,7 @@ public class Endpoints extends Scene {
 
                     answerWithPoll(incomingMessage, YmlReader.getString(new String[]{"poll_question", lang.getValue()}),
                         options, false);
-                    ;
+                    return currentState;
                 }
                 case "9" -> {
                     answerWithText(incomingMessage,
@@ -138,7 +143,7 @@ public class Endpoints extends Scene {
                         answerWithText(incomingMessage,
                             YmlReader.getString(new String[]{"avatar_not_found", lang.getValue()}), false);
                     }
-                    ;
+                    return currentState;
                 }
                 case "10" -> {
                     answerWithText(incomingMessage,
@@ -152,7 +157,7 @@ public class Endpoints extends Scene {
                             YmlReader.getString(new String[]{"links", lang.getValue(), "send_link_documentation"}))
                         .linkPreview(false)
                         .build());
-                    ;
+                    return currentState;
                 }
                 case "11" -> {
                     answerWithText(incomingMessage, YmlReader.getString(new String[]{"add_to_contact", lang.getValue()}), false);
@@ -161,7 +166,6 @@ public class Endpoints extends Scene {
                         .firstName(YmlReader.getString(new String[]{"bot_name", lang.getValue()}))
                         .phoneContact(Long.valueOf(incomingMessage.getInstanceData().getWid().replaceAll("@c\\.us", "")))
                         .build(), false);
-                    ;
 
                     return activateNextScene(currentState, createGroupScene);
                 }
@@ -169,9 +173,10 @@ public class Endpoints extends Scene {
                     answerWithText(incomingMessage,
                         YmlReader.getString(new String[]{"send_quoted_message", lang.getValue()}) +
                             YmlReader.getString(new String[]{"links", lang.getValue(), "send_quoted_message_documentation"}));
+                    return currentState;
                 }
                 case "13" -> {
-                    answerWithUploadFile(incomingMessage, Paths.get("assets/about_java.jpg").toFile(),
+                    answerWithUploadFile(incomingMessage, Paths.get("src/main/resources/assets/about_java.jpg").toFile(),
                         new StringBuilder()
                             .append(YmlReader.getString(new String[]{"about_java_chatbot", lang.getValue()}))
                             .append(YmlReader.getString(new String[]{"link_to_docs", lang.getValue()}))
@@ -186,8 +191,9 @@ public class Endpoints extends Scene {
                             .append(YmlReader.getString(new String[]{"links", lang.getValue(), "youtube_channel"}))
                             .toString(),
                         false);
+                    return currentState;
                 }
-                case "stop", "стоп", "Stop", "Стоп" -> {
+                case "stop", "стоп", "Stop", "Стоп", "0" -> {
                     answerWithText(incomingMessage,
                         YmlReader.getString(new String[]{"stop_message", lang.getValue()}) +
                             incomingMessage.getSenderData().getSenderName());
@@ -196,17 +202,18 @@ public class Endpoints extends Scene {
                 }
                 case "menu", "меню", "Menu", "Меню" -> {
                     answerWithText(incomingMessage, YmlReader.getString(new String[]{"menu", lang.getValue()}));
+                    return currentState;
                 }
                 default -> {
                     answerWithText(incomingMessage, YmlReader.getString(new String[]{"not_recognized_message", lang.getValue()}));
+                    return currentState;
                 }
             }
-
         } catch (Exception e) {
+            log.error(e);
             answerWithText(incomingMessage, YmlReader.getString(new String[]{"sorry_message"}));
+            return currentState;
         }
-
-        return currentState;
     }
 
     private void processPollUpdate(PollUpdateMessageWebhook pollUpdate, Language lang) {
@@ -228,6 +235,7 @@ public class Endpoints extends Scene {
             }
             answerWithText(pollUpdate, messageText, false);
         } catch (Exception e) {
+            System.out.println(e.getMessage());
             answerWithText(pollUpdate, YmlReader.getString(new String[]{"sorry_message"}));
         }
     }

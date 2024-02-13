@@ -7,6 +7,8 @@ import com.greenapi.demoChatbot.util.Language;
 import com.greenapi.demoChatbot.util.SessionManager;
 import com.greenapi.demoChatbot.util.YmlReader;
 import lombok.AllArgsConstructor;
+import lombok.SneakyThrows;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -15,15 +17,17 @@ import java.net.URI;
 import java.nio.file.Paths;
 
 @Component
+@AllArgsConstructor
+@Log4j2
 public class MainMenu extends Scene {
 
-    @Autowired
     private Endpoints endpointsScene;
 
     @Override
     public State processIncomingMessage(MessageWebhook incomingMessage, State currentState) {
         try {
             if (SessionManager.isSessionExpired(currentState)) {
+                answerWithText(incomingMessage, "session expired");
                 return activateStartScene(currentState);
             }
 
@@ -50,7 +54,6 @@ public class MainMenu extends Scene {
                     }
                     default -> {
                         answerWithText(incomingMessage, YmlReader.getString(new String[]{"specify_language"}), false);
-
                         return currentState;
                     }
                 }
@@ -58,6 +61,7 @@ public class MainMenu extends Scene {
 
             return currentState;
         } catch (Exception e) {
+            log.error(e);
             answerWithText(incomingMessage, YmlReader.getString(new String[]{"sorry_message"}));
             return currentState;
         }
@@ -68,12 +72,12 @@ public class MainMenu extends Scene {
 
         File welcomeFile;
         if (language == Language.RU) {
-            welcomeFile = Paths.get("assets/welcome_ru.png").toFile();
+            welcomeFile = Paths.get("src/main/resources/assets/welcome_ru.png").toFile();
         } else {
-            welcomeFile = Paths.get("assets/welcome_en.png").toFile();
+            welcomeFile = Paths.get("src/main/resources/assets/welcome_en.png").toFile();
         }
 
-        answerWithUploadFile(incomingMessage, welcomeFile, "welcome.png",
+        answerWithUploadFile(incomingMessage, welcomeFile,
             YmlReader.getString(new String[]{"welcome_message", language.getValue()}) +
                 incomingMessage.getSenderData().getSenderName() + "\n" +
                 YmlReader.getString(new String[]{"menu",language.getValue()}), false

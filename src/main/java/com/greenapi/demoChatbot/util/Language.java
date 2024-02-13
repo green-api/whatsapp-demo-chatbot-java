@@ -1,7 +1,7 @@
 package com.greenapi.demoChatbot.util;
 
 public enum Language {
-    ENG("eng"),
+    ENG("en"),
     RU("ru"),
     HE("he"),
     ES("es"),

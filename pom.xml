@@ -13,7 +13,7 @@
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <lombok.version>1.18.30</lombok.version>
-        <whatsapp-chatbot-java.version>0.0.8</whatsapp-chatbot-java.version>
+        <whatsapp-chatbot-java.version>0.0.9</whatsapp-chatbot-java.version>
         <spring-cloud-starter-config.version>4.0.4</spring-cloud-starter-config.version>
         <spring-cloud-config-server.version>4.0.4</spring-cloud-config-server.version>
     </properties>
