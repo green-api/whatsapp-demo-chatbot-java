@@ -31,32 +31,20 @@ public class MainMenu extends Scene {
             var messageText = getText(incomingMessage);
             if (messageText.isPresent()) {
                 switch (messageText.get()) {
-                    case "1" -> {
-                        return sendMainMenu(incomingMessage, currentState, Language.ENG);
-                    }
-                    case "2" -> {
-                        return sendMainMenu(incomingMessage, currentState, Language.KZ);
-                    }
-                    case "3" -> {
-                        return sendMainMenu(incomingMessage, currentState, Language.RU);
-                    }
-                    case "4" -> {
-                        return sendMainMenu(incomingMessage, currentState, Language.ES);
-                    }
-                    case "5" -> {
-                        return sendMainMenu(incomingMessage, currentState, Language.HE);
-                    }
-                    case "6" -> {
-                        return sendMainMenu(incomingMessage, currentState, Language.AR);
-                    }
+                    case "1" -> sendMainMenu(incomingMessage, currentState, Language.ENG);
+                    case "2" -> sendMainMenu(incomingMessage, currentState, Language.KZ);
+                    case "3" -> sendMainMenu(incomingMessage, currentState, Language.RU);
+                    case "4" -> sendMainMenu(incomingMessage, currentState, Language.ES);
+                    case "5" -> sendMainMenu(incomingMessage, currentState, Language.HE);
+                    case "6" -> sendMainMenu(incomingMessage, currentState, Language.AR);
                     default -> {
                         answerWithText(incomingMessage, YmlReader.getString(new String[]{"specify_language"}), false);
                         return currentState;
                     }
                 }
             }
+            return activateNextScene(currentState, endpointsScene);
 
-            return currentState;
         } catch (Exception e) {
             log.error(e);
             answerWithText(incomingMessage, YmlReader.getString(new String[]{"sorry_message"}));
@@ -64,7 +52,7 @@ public class MainMenu extends Scene {
         }
     }
 
-    private State sendMainMenu(MessageWebhook incomingMessage, State currentState, Language language) {
+    private void sendMainMenu(MessageWebhook incomingMessage, State currentState, Language language) {
         currentState.getData().put("lang", language);
 
         File welcomeFile;
@@ -79,7 +67,5 @@ public class MainMenu extends Scene {
                 incomingMessage.getSenderData().getSenderName() + "\n" +
                 YmlReader.getString(new String[]{"menu", language.getValue()}), false
         );
-
-        return activateNextScene(currentState, endpointsScene);
     }
 }
