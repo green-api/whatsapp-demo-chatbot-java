@@ -68,9 +68,9 @@ public class MainMenu extends Scene {
 
         File welcomeFile;
         if (language == Language.RU) {
-            welcomeFile = Paths.get("src/main/resources/assets/welcome_ru.png").toFile();
+            welcomeFile = Paths.get("assets/welcome_ru.png").toFile();
         } else {
-            welcomeFile = Paths.get("src/main/resources/assets/welcome_en.png").toFile();
+            welcomeFile = Paths.get("assets/welcome_en.png").toFile();
         }
 
         answerWithUploadFile(incomingMessage, welcomeFile, "welcome.png",

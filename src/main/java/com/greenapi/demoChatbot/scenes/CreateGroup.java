@@ -37,7 +37,7 @@ public class CreateGroup extends Scene {
 
                     var setGroupPicture = greenApi.groups.setGroupPicture(ChangeGroupPictureReq.builder()
                         .groupId(group.getBody().getChatId())
-                        .file(Paths.get("src/main/resources/assets/Group_avatar.jpg").toFile())
+                        .file(Paths.get("assets/group_avatar.jpg").toFile())
                         .build());
 
                     if (setGroupPicture.getStatusCode().is2xxSuccessful()) {

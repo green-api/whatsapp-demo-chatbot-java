@@ -171,7 +171,7 @@ public class Endpoints extends Scene {
                             YmlReader.getString(new String[]{"links", lang.getValue(), "send_quoted_message_documentation"}));
                 }
                 case "13" -> {
-                    answerWithUploadFile(incomingMessage, Paths.get("src/main/resources/assets/about_java.jpg").toFile(),
+                    answerWithUploadFile(incomingMessage, Paths.get("assets/about_java.jpg").toFile(),
                         new StringBuilder()
                             .append(YmlReader.getString(new String[]{"about_java_chatbot", lang.getValue()}))
                             .append(YmlReader.getString(new String[]{"link_to_docs", lang.getValue()}))
