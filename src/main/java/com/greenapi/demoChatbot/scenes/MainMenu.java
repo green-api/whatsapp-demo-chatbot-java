@@ -24,8 +24,8 @@ public class MainMenu extends Scene {
     public State processIncomingMessage(MessageWebhook incomingMessage, State currentState) {
         try {
             if (SessionManager.isSessionExpired(currentState)) {
-                answerWithText(incomingMessage, "session expired");
-                return activateStartScene(currentState);
+                answerWithText(incomingMessage, YmlReader.getString(new String[]{"select_language"}), false);
+                return currentState;
             }
 
             var messageText = getText(incomingMessage);
@@ -46,7 +46,7 @@ public class MainMenu extends Scene {
             return activateNextScene(currentState, endpointsScene);
 
         } catch (Exception e) {
-            log.error(e);
+            log.error(e.getStackTrace());
             answerWithText(incomingMessage, YmlReader.getString(new String[]{"sorry_message"}));
             return currentState;
         }

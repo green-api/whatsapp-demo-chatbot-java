@@ -19,9 +19,8 @@ public class Start extends Scene {
         try {
             answerWithText(incomingMessage, YmlReader.getString(new String[]{"select_language"}), false);
             return activateNextScene(currentState, mainMenuScene);
-
         } catch (Exception e) {
-            log.error(e);
+            log.error(e.getStackTrace());
             answerWithText(incomingMessage, YmlReader.getString(new String[]{"sorry_message"}));
             return currentState;
         }

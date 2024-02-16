@@ -6,31 +6,39 @@ import com.greenapi.client.pkg.models.Contact;
 import com.greenapi.client.pkg.models.notifications.MessageWebhook;
 import com.greenapi.client.pkg.models.request.ChangeGroupPictureReq;
 import com.greenapi.client.pkg.models.request.CreateGroupReq;
+import com.greenapi.client.pkg.models.request.OutgoingMessage;
+import com.greenapi.client.pkg.models.response.SendMessageResp;
 import com.greenapi.demoChatbot.util.Language;
 import com.greenapi.demoChatbot.util.SessionManager;
 import com.greenapi.demoChatbot.util.YmlReader;
-import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Objects;
 
 @Component
-@AllArgsConstructor
 @Log4j2
 public class CreateGroup extends Scene {
+    private final Endpoints endpoints;
+    private final MainMenu mainMenu;
 
-    private Environment environment;
-    private final Endpoints endpoints = new Endpoints(environment, this);
+    @Autowired
+    public CreateGroup(Environment environment) {
+        this.endpoints = new Endpoints(environment, this);
+        this.mainMenu = new MainMenu(endpoints);
+    }
 
     @Override
     public State processIncomingMessage(MessageWebhook incomingMessage, State currentState) {
         if (SessionManager.isSessionExpired(currentState)) {
-            answerWithText(incomingMessage, "session expired");
-            return activateStartScene(currentState);
+            answerWithText(incomingMessage, YmlReader.getString(new String[]{"select_language"}), false);
+            return activateNextScene(currentState, mainMenu);
         }
 
         var lang = (Language) currentState.getData().get("lang");
@@ -54,11 +62,25 @@ public class CreateGroup extends Scene {
 
                     if (setGroupPicture.getStatusCode().is2xxSuccessful()) {
                         if (Objects.requireNonNull(setGroupPicture.getBody()).getSetGroupPicture()) {
-                            answerWithText(incomingMessage, YmlReader.getString(new String[]{"send_group_message", lang.getValue()}) +
-                                YmlReader.getString(new String[]{"links", lang.getValue(), "create_group_documentation"}), false);
+                            try {
+                                greenApi.sending.sendMessage(OutgoingMessage.builder()
+                                    .chatId(group.getBody().getChatId())
+                                    .message(YmlReader.getString(new String[]{"send_group_message", lang.getValue()}) +
+                                        YmlReader.getString(new String[]{"links", lang.getValue(), "create_group_documentation"}))
+                                    .build());
+                            } catch (Exception e) {
+                                log.error(e.getMessage());
+                            }
                         } else {
-                            answerWithText(incomingMessage, YmlReader.getString(new String[]{"send_group_message_set_picture_false", lang.getValue()}) +
-                                YmlReader.getString(new String[]{"links", lang.getValue(), "create_group_documentation"}), false);
+                            try {
+                                greenApi.sending.sendMessage(OutgoingMessage.builder()
+                                    .chatId(group.getBody().getChatId())
+                                    .message(YmlReader.getString(new String[]{"send_group_message_set_picture_false", lang.getValue()}) +
+                                        YmlReader.getString(new String[]{"links", lang.getValue(), "create_group_documentation"}))
+                                    .build());
+                            } catch (Exception e) {
+                                log.error(e.getMessage());
+                            }
                         }
                         answerWithText(incomingMessage, YmlReader.getString(new String[]{"group_created_message", lang.getValue()}) +
                             group.getBody().getGroupInviteLink(), false);
@@ -85,7 +107,7 @@ public class CreateGroup extends Scene {
                 }
             }
         } catch (Exception e) {
-            log.error(e);
+            log.error(e.getMessage());
             answerWithText(incomingMessage, YmlReader.getString(new String[]{"sorry_message"}), false);
             return currentState;
         }

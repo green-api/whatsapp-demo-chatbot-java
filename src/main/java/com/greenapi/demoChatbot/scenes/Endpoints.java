@@ -13,27 +13,35 @@ import com.greenapi.demoChatbot.util.SessionManager;
 import com.greenapi.demoChatbot.util.YmlReader;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 @Component
-@AllArgsConstructor
 @Log4j2
 public class Endpoints extends Scene {
 
-    private Environment environment;
+    private final Environment environment;
+    private final CreateGroup createGroupScene;
+    private final MainMenu mainMenu;
 
-    private CreateGroup createGroupScene;
+    @Autowired
+    public Endpoints(Environment environment, CreateGroup createGroup) {
+        this.environment = environment;
+        this.createGroupScene = createGroup;
+        this.mainMenu = new MainMenu(this);
+    }
 
     @Override
     public State processIncomingMessage(MessageWebhook incomingMessage, State currentState) {
         try {
             if (SessionManager.isSessionExpired(currentState)) {
-                answerWithText(incomingMessage, "session expired");
-                return activateStartScene(currentState);
+                answerWithText(incomingMessage, YmlReader.getString(new String[]{"select_language"}), false);
+                return activateNextScene(currentState, mainMenu);
             }
 
             var lang = (Language) currentState.getData().get("lang");
@@ -113,7 +121,9 @@ public class Endpoints extends Scene {
                 }
                 case "8" -> {
                     answerWithText(incomingMessage,
-                        YmlReader.getString(new String[]{"send_poll_message", lang.getValue()}) + "\n" +
+                        YmlReader.getString(new String[]{"send_poll_message", lang.getValue()}) +
+                            YmlReader.getString(new String[]{"links", lang.getValue(), "send_poll_as_buttons"}) +
+                        YmlReader.getString(new String[]{"send_poll_message_1", lang.getValue()}) +
                             YmlReader.getString(new String[]{"links", lang.getValue(), "send_poll_documentation"}),
                         false);
 
@@ -195,7 +205,7 @@ public class Endpoints extends Scene {
                 case "stop", "стоп", "Stop", "Стоп", "0" -> {
                     answerWithText(incomingMessage,
                         YmlReader.getString(new String[]{"stop_message", lang.getValue()}) +
-                            incomingMessage.getSenderData().getSenderName());
+                            incomingMessage.getSenderData().getSenderName(), false);
 
                     return activateStartScene(currentState);
                 }
@@ -209,7 +219,7 @@ public class Endpoints extends Scene {
                 }
             }
         } catch (Exception e) {
-            log.error(e);
+            log.error(Arrays.toString(e.getStackTrace()));
             answerWithText(incomingMessage, YmlReader.getString(new String[]{"sorry_message"}));
             return currentState;
         }
@@ -234,7 +244,7 @@ public class Endpoints extends Scene {
             }
             answerWithText(pollUpdate, messageText, false);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            log.error(e.getStackTrace());
             answerWithText(pollUpdate, YmlReader.getString(new String[]{"sorry_message"}));
         }
     }
