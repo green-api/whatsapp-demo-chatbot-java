@@ -68,7 +68,7 @@ public class Endpoints extends Scene {
                     answerWithUrlFile(incomingMessage,
                         YmlReader.getString(new String[]{"send_file_message", lang.getValue()}) +
                             YmlReader.getString(new String[]{"links", lang.getValue(), "send_file_documentation"}),
-                        environment.getProperty("link_1"),
+                        "https://storage.yandexcloud.net/sw-prod-03-test/ChatBot/corgi.pdf",
                         "corgi.pdf",
                         false);
                     return currentState;
@@ -77,7 +77,7 @@ public class Endpoints extends Scene {
                     answerWithUrlFile(incomingMessage,
                         YmlReader.getString(new String[]{"send_file_message", lang.getValue()}) +
                             YmlReader.getString(new String[]{"links", lang.getValue(), "send_file_documentation"}),
-                        environment.getProperty("link_2"),
+                        "https://storage.yandexcloud.net/sw-prod-03-test/ChatBot/corgi.jpg",
                         "corgi.jpg",
                         false);
                     return currentState;
@@ -86,14 +86,16 @@ public class Endpoints extends Scene {
                     answerWithText(incomingMessage, YmlReader.getString(new String[]{"send_audio_message", lang.getValue()}) +
                         YmlReader.getString(new String[]{"links", lang.getValue(), "send_file_documentation"}), false);
 
-                    answerWithUrlFile(incomingMessage, "", environment.getProperty("link_3"), "audio.mp3", false);
+                    answerWithUrlFile(incomingMessage, "",
+                        "https://storage.yandexcloud.net/sw-prod-03-test/ChatBot/Audio_for_bot.mp3",
+                        "audio.mp3", false);
                     return currentState;
                 }
                 case "5" -> {
                     answerWithUrlFile(incomingMessage,
                         YmlReader.getString(new String[]{"send_video_message", lang.getValue()}) +
                             YmlReader.getString(new String[]{"links", lang.getValue(), "send_file_documentation"}),
-                        environment.getProperty("link_4"),
+                        "https://storage.yandexcloud.net/sw-prod-03-test/ChatBot/For_bot.mp4",
                         "video.mp4", false);
                     return currentState;
                 }

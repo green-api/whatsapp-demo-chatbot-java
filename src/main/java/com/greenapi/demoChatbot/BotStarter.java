@@ -14,10 +14,8 @@ public class BotStarter {
         var botFactory = context.getBean(BotFactory.class);
         var startScene = context.getBean(Start.class);
 
-//        var instanceId = context.getEnvironment().getProperty("user_id");
-//        var token = context.getEnvironment().getProperty("api_token_id");
-        var instanceId = "1101848919";
-        var token = "fe0453b47e1b403c8d88ce881291ea002292b3037ae045bcb2";
+        var instanceId = "{instanceId}";
+        var token = "{TokenId}";
 
         var bot = botFactory.createBot(instanceId, token);
 
