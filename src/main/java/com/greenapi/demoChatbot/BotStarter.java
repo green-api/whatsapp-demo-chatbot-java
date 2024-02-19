@@ -3,10 +3,12 @@ package com.greenapi.demoChatbot;
 import com.greenapi.chatbot.pkg.BotFactory;
 import com.greenapi.client.pkg.models.request.InstanceSettingsReq;
 import com.greenapi.demoChatbot.scenes.Start;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
+@Log4j2
 public class BotStarter {
 
     public static void main(String[] args) {
@@ -14,10 +16,10 @@ public class BotStarter {
         var botFactory = context.getBean(BotFactory.class);
         var startScene = context.getBean(Start.class);
 
-//        var instanceId = context.getEnvironment().getProperty("user_id");
-//        var token = context.getEnvironment().getProperty("api_token_id");
-        var instanceId = "1101848919";
-        var token = "fe0453b47e1b403c8d88ce881291ea002292b3037ae045bcb2";
+        var instanceId = context.getEnvironment().getProperty("user_id");
+        var token = context.getEnvironment().getProperty("api_token_id");
+//        var instanceId = "1101848919";
+//        var token = "fe0453b47e1b403c8d88ce881291ea002292b3037ae045bcb2";
 
         var bot = botFactory.createBot(instanceId, token);
 
@@ -28,6 +30,7 @@ public class BotStarter {
             .pollMessageWebhook("yes")
             .markIncomingMessagesReaded("yes")
             .build());
+        log.info("Settings updated by bot");
 
         bot.setStartScene(startScene);
 

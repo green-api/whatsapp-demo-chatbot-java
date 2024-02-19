@@ -9,6 +9,7 @@ import com.greenapi.client.pkg.models.notifications.PollUpdateMessageWebhook;
 import com.greenapi.client.pkg.models.notifications.messages.messageData.PollUpdateMessageData;
 import com.greenapi.client.pkg.models.request.OutgoingMessage;
 import com.greenapi.demoChatbot.util.Language;
+import com.greenapi.demoChatbot.util.LogBuilder;
 import com.greenapi.demoChatbot.util.SessionManager;
 import com.greenapi.demoChatbot.util.YmlReader;
 import lombok.AllArgsConstructor;
@@ -38,9 +39,11 @@ public class Endpoints extends Scene {
 
     @Override
     public State processIncomingMessage(MessageWebhook incomingMessage, State currentState) {
+        log.info(LogBuilder.build(incomingMessage, "IncomingMessageHandler in EndpointsScene handles"));
         try {
             if (SessionManager.isSessionExpired(currentState)) {
                 answerWithText(incomingMessage, YmlReader.getString(new String[]{"select_language"}), false);
+                log.info(LogBuilder.build(incomingMessage, "Session expired = true, Starting MainMenuScene..."));
                 return activateNextScene(currentState, mainMenu);
             }
 
@@ -75,7 +78,7 @@ public class Endpoints extends Scene {
                 }
                 case "3" -> {
                     answerWithUrlFile(incomingMessage,
-                        YmlReader.getString(new String[]{"send_file_message", lang.getValue()}) +
+                        YmlReader.getString(new String[]{"send_image_message", lang.getValue()}) +
                             YmlReader.getString(new String[]{"links", lang.getValue(), "send_file_documentation"}),
                         environment.getProperty("link_2"),
                         "corgi.jpg",

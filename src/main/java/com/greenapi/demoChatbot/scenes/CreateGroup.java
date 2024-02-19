@@ -7,18 +7,16 @@ import com.greenapi.client.pkg.models.notifications.MessageWebhook;
 import com.greenapi.client.pkg.models.request.ChangeGroupPictureReq;
 import com.greenapi.client.pkg.models.request.CreateGroupReq;
 import com.greenapi.client.pkg.models.request.OutgoingMessage;
-import com.greenapi.client.pkg.models.response.SendMessageResp;
 import com.greenapi.demoChatbot.util.Language;
+import com.greenapi.demoChatbot.util.LogBuilder;
 import com.greenapi.demoChatbot.util.SessionManager;
 import com.greenapi.demoChatbot.util.YmlReader;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import java.nio.file.Paths;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Objects;
 
@@ -36,8 +34,10 @@ public class CreateGroup extends Scene {
 
     @Override
     public State processIncomingMessage(MessageWebhook incomingMessage, State currentState) {
+        log.info(LogBuilder.build(incomingMessage, "IncomingMessageHandler in CreateGroupScene handles"));
         if (SessionManager.isSessionExpired(currentState)) {
             answerWithText(incomingMessage, YmlReader.getString(new String[]{"select_language"}), false);
+            log.info(LogBuilder.build(incomingMessage, "Session expired = true, Starting MainMenuScene..."));
             return activateNextScene(currentState, mainMenu);
         }
 

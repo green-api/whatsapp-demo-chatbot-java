@@ -6,3 +6,6 @@ green-api:
 spring:
   config:
     import: optional:http://sw-prod-gateway.ru-central1.internal:8081/sw-chatbot-java-7103.yml
+logging:
+  level:
+    root: info
