@@ -223,11 +223,7 @@ public class Endpoints extends Scene {
                         welcomeFile = Paths.get("src/main/resources/assets/welcome_en.png").toFile();
                     }
 
-                    answerWithUploadFile(incomingMessage, welcomeFile,
-                        YmlReader.getString(new String[]{"welcome_message", lang.getValue()}) +
-                            "*" + incomingMessage.getSenderData().getSenderName() + "*!" + "\n" +
-                            YmlReader.getString(new String[]{"menu", lang.getValue()}), false
-                    );
+                    answerWithUploadFile(incomingMessage, welcomeFile, YmlReader.getString(new String[]{"menu", lang.getValue()}), false);
 
                     return currentState;
                 }

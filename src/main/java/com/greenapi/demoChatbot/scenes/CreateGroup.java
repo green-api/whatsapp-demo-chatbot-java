@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
+import java.io.File;
 import java.nio.file.Paths;
 import java.util.*;
 
@@ -97,7 +98,14 @@ public class CreateGroup extends Scene {
                     return activateNextScene(currentState, endpoints);
                 }
                 case "0" -> {
-                    answerWithText(incomingMessage, YmlReader.getString(new String[]{"menu", lang.getValue()}), false);
+                    File welcomeFile;
+                    if (lang == Language.RU) {
+                        welcomeFile = Paths.get("src/main/resources/assets/welcome_ru.png").toFile();
+                    } else {
+                        welcomeFile = Paths.get("src/main/resources/assets/welcome_en.png").toFile();
+                    }
+                    answerWithUploadFile(incomingMessage, welcomeFile, YmlReader.getString(new String[]{"menu", lang.getValue()}), false);
+
                     return activateNextScene(currentState, endpoints);
                 }
                 case "menu", "меню", "Menu", "Меню" -> {
