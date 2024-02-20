@@ -67,7 +67,7 @@ public class MainMenu extends Scene {
 
         answerWithUploadFile(incomingMessage, welcomeFile,
             YmlReader.getString(new String[]{"welcome_message", language.getValue()}) +
-                incomingMessage.getSenderData().getSenderName() + "\n" +
+                "*" + incomingMessage.getSenderData().getSenderName() + "*!" + "\n" +
                 YmlReader.getString(new String[]{"menu", language.getValue()}), false
         );
     }

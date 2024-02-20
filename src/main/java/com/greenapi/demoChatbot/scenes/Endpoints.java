@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
+import java.io.File;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -89,14 +90,16 @@ public class Endpoints extends Scene {
                     answerWithText(incomingMessage, YmlReader.getString(new String[]{"send_audio_message", lang.getValue()}) +
                         YmlReader.getString(new String[]{"links", lang.getValue(), "send_file_documentation"}), false);
 
-                    answerWithUrlFile(incomingMessage, "", environment.getProperty("link_3"), "audio.mp3", false);
+                    answerWithUrlFile(incomingMessage, "",
+                        lang == Language.RU ? environment.getProperty("link_3") : environment.getProperty("link_5"),
+                        "audio.mp3", false);
                     return currentState;
                 }
                 case "5" -> {
                     answerWithUrlFile(incomingMessage,
                         YmlReader.getString(new String[]{"send_video_message", lang.getValue()}) +
                             YmlReader.getString(new String[]{"links", lang.getValue(), "send_file_documentation"}),
-                        environment.getProperty("link_4"),
+                        lang == Language.RU ? environment.getProperty("link_4") : environment.getProperty("link_6"),
                         "video.mp4", false);
                     return currentState;
                 }
@@ -208,12 +211,24 @@ public class Endpoints extends Scene {
                 case "stop", "стоп", "Stop", "Стоп", "0" -> {
                     answerWithText(incomingMessage,
                         YmlReader.getString(new String[]{"stop_message", lang.getValue()}) +
-                            incomingMessage.getSenderData().getSenderName(), false);
+                            "*" + incomingMessage.getSenderData().getSenderName() + "*", false);
 
                     return activateStartScene(currentState);
                 }
                 case "menu", "меню", "Menu", "Меню" -> {
-                    answerWithText(incomingMessage, YmlReader.getString(new String[]{"menu", lang.getValue()}));
+                    File welcomeFile;
+                    if (lang == Language.RU) {
+                        welcomeFile = Paths.get("src/main/resources/assets/welcome_ru.png").toFile();
+                    } else {
+                        welcomeFile = Paths.get("src/main/resources/assets/welcome_en.png").toFile();
+                    }
+
+                    answerWithUploadFile(incomingMessage, welcomeFile,
+                        YmlReader.getString(new String[]{"welcome_message", lang.getValue()}) +
+                            "*" + incomingMessage.getSenderData().getSenderName() + "*!" + "\n" +
+                            YmlReader.getString(new String[]{"menu", lang.getValue()}), false
+                    );
+
                     return currentState;
                 }
                 default -> {
@@ -248,7 +263,7 @@ public class Endpoints extends Scene {
             answerWithText(pollUpdate, messageText, false);
         } catch (Exception e) {
             log.error(e.getStackTrace());
-            answerWithText(pollUpdate, YmlReader.getString(new String[]{"sorry_message"}));
+            answerWithText(pollUpdate, YmlReader.getString(new String[]{"sorry_message"}), false);
         }
     }
 }

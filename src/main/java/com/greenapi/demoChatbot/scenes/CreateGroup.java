@@ -1,7 +1,10 @@
 package com.greenapi.demoChatbot.scenes;
 
 import com.greenapi.chatbot.pkg.Scene;
+import com.greenapi.chatbot.pkg.state.MapState;
 import com.greenapi.chatbot.pkg.state.State;
+import com.greenapi.chatbot.pkg.state.StateManager;
+import com.greenapi.chatbot.pkg.state.StateManagerHashMapImpl;
 import com.greenapi.client.pkg.models.Contact;
 import com.greenapi.client.pkg.models.notifications.MessageWebhook;
 import com.greenapi.client.pkg.models.request.ChangeGroupPictureReq;
@@ -17,8 +20,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import java.nio.file.Paths;
-import java.util.Collections;
-import java.util.Objects;
+import java.util.*;
 
 @Component
 @Log4j2
@@ -55,8 +57,15 @@ public class CreateGroup extends Scene {
                         .groupName(YmlReader.getString(new String[]{"group_name", lang.getValue()}))
                         .build());
 
+                    var groupId = Objects.requireNonNull(group.getBody()).getChatId();
+
+                    stateManager.create(groupId);
+                    var groupState = new MapState(currentState.getData());
+                    groupState.setScene(endpoints);
+                    stateManager.updateStateData(groupId, groupState.getData());
+
                     var setGroupPicture = greenApi.groups.setGroupPicture(ChangeGroupPictureReq.builder()
-                        .groupId(Objects.requireNonNull(group.getBody()).getChatId())
+                        .groupId(groupId)
                         .file(Paths.get("src/main/resources/assets/group_avatar.jpg").toFile())
                         .build());
 
@@ -64,7 +73,7 @@ public class CreateGroup extends Scene {
                         if (Objects.requireNonNull(setGroupPicture.getBody()).getSetGroupPicture()) {
                             try {
                                 greenApi.sending.sendMessage(OutgoingMessage.builder()
-                                    .chatId(group.getBody().getChatId())
+                                    .chatId(groupId)
                                     .message(YmlReader.getString(new String[]{"send_group_message", lang.getValue()}) +
                                         YmlReader.getString(new String[]{"links", lang.getValue(), "create_group_documentation"}))
                                     .build());
@@ -74,7 +83,7 @@ public class CreateGroup extends Scene {
                         } else {
                             try {
                                 greenApi.sending.sendMessage(OutgoingMessage.builder()
-                                    .chatId(group.getBody().getChatId())
+                                    .chatId(groupId)
                                     .message(YmlReader.getString(new String[]{"send_group_message_set_picture_false", lang.getValue()}) +
                                         YmlReader.getString(new String[]{"links", lang.getValue(), "create_group_documentation"}))
                                     .build());
