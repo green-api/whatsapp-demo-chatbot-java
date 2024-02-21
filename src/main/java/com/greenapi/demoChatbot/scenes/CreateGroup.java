@@ -109,17 +109,19 @@ public class CreateGroup extends Scene {
                     return activateNextScene(currentState, endpoints);
                 }
                 case "menu", "меню", "Menu", "Меню" -> {
-                    answerWithText(incomingMessage, YmlReader.getString(new String[]{"add_to_contact", lang.getValue()}), false);
+                    File welcomeFile;
+                    if (lang == Language.RU) {
+                        welcomeFile = Paths.get("src/main/resources/assets/welcome_ru.png").toFile();
+                    } else {
+                        welcomeFile = Paths.get("src/main/resources/assets/welcome_en.png").toFile();
+                    }
 
-                    answerWithContact(incomingMessage, Contact.builder()
-                        .firstName(YmlReader.getString(new String[]{"bot_name", lang.getValue()}))
-                        .phoneContact(Long.valueOf(incomingMessage.getInstanceData().getWid().replaceAll("@c\\.us", "")))
-                        .build(), false);
+                    answerWithUploadFile(incomingMessage, welcomeFile, YmlReader.getString(new String[]{"menu", lang.getValue()}), false);
 
                     return currentState;
                 }
                 default -> {
-                    answerWithText(incomingMessage, YmlReader.getString(new String[]{"not_recognized_message", lang.getValue()}));
+                    answerWithText(incomingMessage, YmlReader.getString(new String[]{"not_recognized_message", lang.getValue()}),false);
                     return currentState;
                 }
             }

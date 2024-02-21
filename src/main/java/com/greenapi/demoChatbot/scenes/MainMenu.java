@@ -50,7 +50,7 @@ public class MainMenu extends Scene {
 
         } catch (Exception e) {
             log.error(e.getStackTrace());
-            answerWithText(incomingMessage, YmlReader.getString(new String[]{"sorry_message"}));
+            answerWithText(incomingMessage, YmlReader.getString(new String[]{"sorry_message"}),false);
             return currentState;
         }
     }
