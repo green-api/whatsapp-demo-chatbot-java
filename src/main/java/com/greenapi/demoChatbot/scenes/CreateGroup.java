@@ -97,7 +97,7 @@ public class CreateGroup extends Scene {
                     }
                     return activateNextScene(currentState, endpoints);
                 }
-                case "0" -> {
+                case "menu", "меню", "Menu", "Меню", "0" -> {
                     File welcomeFile;
                     if (lang == Language.RU) {
                         welcomeFile = Paths.get("src/main/resources/assets/welcome_ru.png").toFile();
@@ -107,18 +107,6 @@ public class CreateGroup extends Scene {
                     answerWithUploadFile(incomingMessage, welcomeFile, YmlReader.getString(new String[]{"menu", lang.getValue()}), false);
 
                     return activateNextScene(currentState, endpoints);
-                }
-                case "menu", "меню", "Menu", "Меню" -> {
-                    File welcomeFile;
-                    if (lang == Language.RU) {
-                        welcomeFile = Paths.get("src/main/resources/assets/welcome_ru.png").toFile();
-                    } else {
-                        welcomeFile = Paths.get("src/main/resources/assets/welcome_en.png").toFile();
-                    }
-
-                    answerWithUploadFile(incomingMessage, welcomeFile, YmlReader.getString(new String[]{"menu", lang.getValue()}), false);
-
-                    return currentState;
                 }
                 default -> {
                     answerWithText(incomingMessage, YmlReader.getString(new String[]{"not_recognized_message", lang.getValue()}),false);
