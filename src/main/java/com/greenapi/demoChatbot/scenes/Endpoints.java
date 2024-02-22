@@ -211,7 +211,7 @@ public class Endpoints extends Scene {
                 case "stop", "стоп", "Stop", "Стоп", "0" -> {
                     answerWithText(incomingMessage,
                         YmlReader.getString(new String[]{"stop_message", lang.getValue()}) +
-                            "*" + incomingMessage.getSenderData().getSenderName() + "*", false);
+                            "*" + incomingMessage.getSenderData().getSenderName() + "*!", false);
 
                     return activateStartScene(currentState);
                 }
