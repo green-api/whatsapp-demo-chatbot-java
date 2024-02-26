@@ -12,7 +12,6 @@ import com.greenapi.demoChatbot.util.Language;
 import com.greenapi.demoChatbot.util.LogBuilder;
 import com.greenapi.demoChatbot.util.SessionManager;
 import com.greenapi.demoChatbot.util.YmlReader;
-import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -129,7 +128,7 @@ public class Endpoints extends Scene {
                     answerWithText(incomingMessage,
                         YmlReader.getString(new String[]{"send_poll_message", lang.getValue()}) +
                             YmlReader.getString(new String[]{"links", lang.getValue(), "send_poll_as_buttons"}) +
-                        YmlReader.getString(new String[]{"send_poll_message_1", lang.getValue()}) +
+                            YmlReader.getString(new String[]{"send_poll_message_1", lang.getValue()}) +
                             YmlReader.getString(new String[]{"links", lang.getValue(), "send_poll_documentation"}),
                         false);
 

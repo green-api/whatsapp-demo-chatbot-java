@@ -3,9 +3,6 @@ package com.greenapi.demoChatbot.scenes;
 import com.greenapi.chatbot.pkg.Scene;
 import com.greenapi.chatbot.pkg.state.MapState;
 import com.greenapi.chatbot.pkg.state.State;
-import com.greenapi.chatbot.pkg.state.StateManager;
-import com.greenapi.chatbot.pkg.state.StateManagerHashMapImpl;
-import com.greenapi.client.pkg.models.Contact;
 import com.greenapi.client.pkg.models.notifications.MessageWebhook;
 import com.greenapi.client.pkg.models.request.ChangeGroupPictureReq;
 import com.greenapi.client.pkg.models.request.CreateGroupReq;
@@ -21,7 +18,8 @@ import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.Collections;
+import java.util.Objects;
 
 @Component
 @Log4j2
@@ -109,7 +107,7 @@ public class CreateGroup extends Scene {
                     return activateNextScene(currentState, endpoints);
                 }
                 default -> {
-                    answerWithText(incomingMessage, YmlReader.getString(new String[]{"not_recognized_message", lang.getValue()}),false);
+                    answerWithText(incomingMessage, YmlReader.getString(new String[]{"not_recognized_message", lang.getValue()}), false);
                     return currentState;
                 }
             }
