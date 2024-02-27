@@ -138,7 +138,7 @@ public class Endpoints extends Scene {
                     options.add(new Option(YmlReader.getString(new String[]{"poll_option_3", lang.getValue()})));
 
                     answerWithPoll(incomingMessage, YmlReader.getString(new String[]{"poll_question", lang.getValue()}),
-                        options, false);
+                        options, false, false);
                     return currentState;
                 }
                 case "9" -> {
