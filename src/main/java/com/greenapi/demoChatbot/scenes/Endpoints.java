@@ -232,7 +232,7 @@ public class Endpoints extends Scene {
                 }
             }
         } catch (Exception e) {
-            log.error(Arrays.toString(e.getStackTrace()));
+            log.error(e);
             answerWithText(incomingMessage, YmlReader.getString(new String[]{"sorry_message"}));
             return currentState;
         }

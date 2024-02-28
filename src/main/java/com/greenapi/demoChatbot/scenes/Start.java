@@ -26,7 +26,7 @@ public class Start extends Scene {
 
             return activateNextScene(currentState, mainMenuScene);
         } catch (Exception e) {
-            log.error(e.getStackTrace());
+            log.error(e);
             answerWithText(incomingMessage, YmlReader.getString(new String[]{"sorry_message"}));
 
             return currentState;

@@ -112,7 +112,7 @@ public class CreateGroup extends Scene {
                 }
             }
         } catch (Exception e) {
-            log.error(e.getMessage());
+            log.error(e);
             answerWithText(incomingMessage, YmlReader.getString(new String[]{"sorry_message"}), false);
             return currentState;
         }

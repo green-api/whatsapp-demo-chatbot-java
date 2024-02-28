@@ -49,7 +49,7 @@ public class MainMenu extends Scene {
             return activateNextScene(currentState, endpointsScene);
 
         } catch (Exception e) {
-            log.error(e.getStackTrace());
+            log.error(e);
             answerWithText(incomingMessage, YmlReader.getString(new String[]{"sorry_message"}), false);
             return currentState;
         }
