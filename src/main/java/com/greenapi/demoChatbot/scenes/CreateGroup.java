@@ -1,24 +1,22 @@
 package com.greenapi.demoChatbot.scenes;
 
 import com.greenapi.chatbot.pkg.Scene;
+import com.greenapi.chatbot.pkg.state.MapState;
 import com.greenapi.chatbot.pkg.state.State;
-import com.greenapi.client.pkg.models.Contact;
 import com.greenapi.client.pkg.models.notifications.MessageWebhook;
 import com.greenapi.client.pkg.models.request.ChangeGroupPictureReq;
 import com.greenapi.client.pkg.models.request.CreateGroupReq;
 import com.greenapi.client.pkg.models.request.OutgoingMessage;
-import com.greenapi.client.pkg.models.response.SendMessageResp;
 import com.greenapi.demoChatbot.util.Language;
 import com.greenapi.demoChatbot.util.SessionManager;
 import com.greenapi.demoChatbot.util.YmlReader;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
+import java.io.File;
 import java.nio.file.Paths;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Objects;
 
@@ -55,8 +53,15 @@ public class CreateGroup extends Scene {
                         .groupName(YmlReader.getString(new String[]{"group_name", lang.getValue()}))
                         .build());
 
+                    var groupId = Objects.requireNonNull(group.getBody()).getChatId();
+
+                    stateManager.create(groupId);
+                    var groupState = new MapState(currentState.getData());
+                    groupState.setScene(endpoints);
+                    stateManager.updateStateData(groupId, groupState.getData());
+
                     var setGroupPicture = greenApi.groups.setGroupPicture(ChangeGroupPictureReq.builder()
-                        .groupId(Objects.requireNonNull(group.getBody()).getChatId())
+                        .groupId(groupId)
                         .file(Paths.get("src/main/resources/assets/group_avatar.jpg").toFile())
                         .build());
 
@@ -64,7 +69,7 @@ public class CreateGroup extends Scene {
                         if (Objects.requireNonNull(setGroupPicture.getBody()).getSetGroupPicture()) {
                             try {
                                 greenApi.sending.sendMessage(OutgoingMessage.builder()
-                                    .chatId(group.getBody().getChatId())
+                                    .chatId(groupId)
                                     .message(YmlReader.getString(new String[]{"send_group_message", lang.getValue()}) +
                                         YmlReader.getString(new String[]{"links", lang.getValue(), "create_group_documentation"}))
                                     .build());
@@ -74,7 +79,7 @@ public class CreateGroup extends Scene {
                         } else {
                             try {
                                 greenApi.sending.sendMessage(OutgoingMessage.builder()
-                                    .chatId(group.getBody().getChatId())
+                                    .chatId(groupId)
                                     .message(YmlReader.getString(new String[]{"send_group_message_set_picture_false", lang.getValue()}) +
                                         YmlReader.getString(new String[]{"links", lang.getValue(), "create_group_documentation"}))
                                     .build());
@@ -87,27 +92,24 @@ public class CreateGroup extends Scene {
                     }
                     return activateNextScene(currentState, endpoints);
                 }
-                case "0" -> {
-                    answerWithText(incomingMessage, YmlReader.getString(new String[]{"menu", lang.getValue()}), false);
+                case "menu", "меню", "Menu", "Меню", "0" -> {
+                    File welcomeFile;
+                    if (lang == Language.RU) {
+                        welcomeFile = Paths.get("src/main/resources/assets/welcome_ru.png").toFile();
+                    } else {
+                        welcomeFile = Paths.get("src/main/resources/assets/welcome_en.png").toFile();
+                    }
+                    answerWithUploadFile(incomingMessage, welcomeFile, YmlReader.getString(new String[]{"menu", lang.getValue()}), false);
+
                     return activateNextScene(currentState, endpoints);
                 }
-                case "menu", "меню", "Menu", "Меню" -> {
-                    answerWithText(incomingMessage, YmlReader.getString(new String[]{"add_to_contact", lang.getValue()}), false);
-
-                    answerWithContact(incomingMessage, Contact.builder()
-                        .firstName(YmlReader.getString(new String[]{"bot_name", lang.getValue()}))
-                        .phoneContact(Long.valueOf(incomingMessage.getInstanceData().getWid().replaceAll("@c\\.us", "")))
-                        .build(), false);
-
-                    return currentState;
-                }
                 default -> {
-                    answerWithText(incomingMessage, YmlReader.getString(new String[]{"not_recognized_message", lang.getValue()}));
+                    answerWithText(incomingMessage, YmlReader.getString(new String[]{"not_recognized_message", lang.getValue()}), false);
                     return currentState;
                 }
             }
         } catch (Exception e) {
-            log.error(e.getMessage());
+            log.error(e);
             answerWithText(incomingMessage, YmlReader.getString(new String[]{"sorry_message"}), false);
             return currentState;
         }

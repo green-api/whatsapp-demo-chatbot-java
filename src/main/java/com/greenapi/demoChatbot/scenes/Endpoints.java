@@ -11,12 +11,12 @@ import com.greenapi.client.pkg.models.request.OutgoingMessage;
 import com.greenapi.demoChatbot.util.Language;
 import com.greenapi.demoChatbot.util.SessionManager;
 import com.greenapi.demoChatbot.util.YmlReader;
-import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
+import java.io.File;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -75,7 +75,7 @@ public class Endpoints extends Scene {
                 }
                 case "3" -> {
                     answerWithUrlFile(incomingMessage,
-                        YmlReader.getString(new String[]{"send_file_message", lang.getValue()}) +
+                        YmlReader.getString(new String[]{"send_image_message", lang.getValue()}) +
                             YmlReader.getString(new String[]{"links", lang.getValue(), "send_file_documentation"}),
                         "https://storage.yandexcloud.net/sw-prod-03-test/ChatBot/corgi.jpg",
                         "corgi.jpg",
@@ -87,7 +87,8 @@ public class Endpoints extends Scene {
                         YmlReader.getString(new String[]{"links", lang.getValue(), "send_file_documentation"}), false);
 
                     answerWithUrlFile(incomingMessage, "",
-                        "https://storage.yandexcloud.net/sw-prod-03-test/ChatBot/Audio_for_bot.mp3",
+                        lang == Language.RU ? environment.getProperty("https://storage.yandexcloud.net/sw-prod-03-test/ChatBot/Audio_bot.mp3") :
+                            environment.getProperty("https://storage.yandexcloud.net/sw-prod-03-test/ChatBot/Audio_bot_eng.mp3"),
                         "audio.mp3", false);
                     return currentState;
                 }
@@ -95,7 +96,8 @@ public class Endpoints extends Scene {
                     answerWithUrlFile(incomingMessage,
                         YmlReader.getString(new String[]{"send_video_message", lang.getValue()}) +
                             YmlReader.getString(new String[]{"links", lang.getValue(), "send_file_documentation"}),
-                        "https://storage.yandexcloud.net/sw-prod-03-test/ChatBot/For_bot.mp4",
+                        lang == Language.RU ? environment.getProperty("https://storage.yandexcloud.net/sw-prod-03-test/ChatBot/Video_bot_ru.mp4") :
+                            environment.getProperty("https://storage.yandexcloud.net/sw-prod-03-test/ChatBot/Video_bot_eng.mp4"),
                         "video.mp4", false);
                     return currentState;
                 }
@@ -125,7 +127,7 @@ public class Endpoints extends Scene {
                     answerWithText(incomingMessage,
                         YmlReader.getString(new String[]{"send_poll_message", lang.getValue()}) +
                             YmlReader.getString(new String[]{"links", lang.getValue(), "send_poll_as_buttons"}) +
-                        YmlReader.getString(new String[]{"send_poll_message_1", lang.getValue()}) +
+                            YmlReader.getString(new String[]{"send_poll_message_1", lang.getValue()}) +
                             YmlReader.getString(new String[]{"links", lang.getValue(), "send_poll_documentation"}),
                         false);
 
@@ -135,7 +137,7 @@ public class Endpoints extends Scene {
                     options.add(new Option(YmlReader.getString(new String[]{"poll_option_3", lang.getValue()})));
 
                     answerWithPoll(incomingMessage, YmlReader.getString(new String[]{"poll_question", lang.getValue()}),
-                        options, false);
+                        options, false, false);
                     return currentState;
                 }
                 case "9" -> {
@@ -207,12 +209,20 @@ public class Endpoints extends Scene {
                 case "stop", "стоп", "Stop", "Стоп", "0" -> {
                     answerWithText(incomingMessage,
                         YmlReader.getString(new String[]{"stop_message", lang.getValue()}) +
-                            incomingMessage.getSenderData().getSenderName(), false);
+                            "*" + incomingMessage.getSenderData().getSenderName() + "*!", false);
 
                     return activateStartScene(currentState);
                 }
                 case "menu", "меню", "Menu", "Меню" -> {
-                    answerWithText(incomingMessage, YmlReader.getString(new String[]{"menu", lang.getValue()}));
+                    File welcomeFile;
+                    if (lang == Language.RU) {
+                        welcomeFile = Paths.get("src/main/resources/assets/welcome_ru.png").toFile();
+                    } else {
+                        welcomeFile = Paths.get("src/main/resources/assets/welcome_en.png").toFile();
+                    }
+
+                    answerWithUploadFile(incomingMessage, welcomeFile, YmlReader.getString(new String[]{"menu", lang.getValue()}), false);
+
                     return currentState;
                 }
                 default -> {
@@ -221,7 +231,7 @@ public class Endpoints extends Scene {
                 }
             }
         } catch (Exception e) {
-            log.error(Arrays.toString(e.getStackTrace()));
+            log.error(e);
             answerWithText(incomingMessage, YmlReader.getString(new String[]{"sorry_message"}));
             return currentState;
         }
@@ -247,7 +257,7 @@ public class Endpoints extends Scene {
             answerWithText(pollUpdate, messageText, false);
         } catch (Exception e) {
             log.error(e.getStackTrace());
-            answerWithText(pollUpdate, YmlReader.getString(new String[]{"sorry_message"}));
+            answerWithText(pollUpdate, YmlReader.getString(new String[]{"sorry_message"}), false);
         }
     }
 }

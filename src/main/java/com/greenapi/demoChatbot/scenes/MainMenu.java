@@ -46,8 +46,8 @@ public class MainMenu extends Scene {
             return activateNextScene(currentState, endpointsScene);
 
         } catch (Exception e) {
-            log.error(e.getStackTrace());
-            answerWithText(incomingMessage, YmlReader.getString(new String[]{"sorry_message"}));
+            log.error(e);
+            answerWithText(incomingMessage, YmlReader.getString(new String[]{"sorry_message"}), false);
             return currentState;
         }
     }
@@ -64,7 +64,7 @@ public class MainMenu extends Scene {
 
         answerWithUploadFile(incomingMessage, welcomeFile,
             YmlReader.getString(new String[]{"welcome_message", language.getValue()}) +
-                incomingMessage.getSenderData().getSenderName() + "\n" +
+                "*" + incomingMessage.getSenderData().getSenderName() + "*!" + "\n" +
                 YmlReader.getString(new String[]{"menu", language.getValue()}), false
         );
     }
