@@ -93,7 +93,7 @@ send_poll_message_1:
   ar: ""
   kz: "\nӘдіс жұмысы туралы білу үшін сілтеме бойынша өтіңіз\n"
 poll_question:
-  ru: "Выберите вариант ответа\nВам нравиться работа демо чатбота?"
+  ru: "Выберите вариант ответа\nВам нравится работа демо чатбота?"
   en: "Select an answer\nDo you like the work of the demo chat bot?"
   he: "בחר תשובה\nהאם אתה אוהב את העבודה של בוט הצ'אט ההדגמה?"
   es: "Seleccione una respuesta\n¿Te gusta el trabajo del chatbot de demostración?"
@@ -114,7 +114,7 @@ poll_option_2:
   ar: ""
   kz: "Жоқ"
 poll_option_3:
-  ru: "Затрудняюсь ответит"
+  ru: "Затрудняюсь ответить"
   en: "Difficult to answer"
   he: "קשה לענות"
   es: "Difícil de responder"
