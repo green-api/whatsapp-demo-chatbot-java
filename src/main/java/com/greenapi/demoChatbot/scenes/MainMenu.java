@@ -36,7 +36,8 @@ public class MainMenu extends Scene {
                     case "3" -> sendMainMenu(incomingMessage, currentState, Language.RU);
                     case "4" -> sendMainMenu(incomingMessage, currentState, Language.ES);
                     case "5" -> sendMainMenu(incomingMessage, currentState, Language.HE);
-                    case "6" -> sendMainMenu(incomingMessage, currentState, Language.AR);
+                    // TO DO: enable case when "AR" language will be ready 
+                    //case "6" -> sendMainMenu(incomingMessage, currentState, Language.AR);
                     default -> {
                         answerWithText(incomingMessage, YmlReader.getString(new String[]{"specify_language"}), false);
                         return currentState;
@@ -55,17 +56,17 @@ public class MainMenu extends Scene {
     private void sendMainMenu(MessageWebhook incomingMessage, State currentState, Language language) {
         currentState.getData().put("lang", language);
 
-        File welcomeFile;
+        String welcomeFileUrl;
         if (language == Language.RU) {
-            welcomeFile = Paths.get("src/main/resources/assets/welcome_ru.png").toFile();
+            welcomeFileUrl = "https://raw.githubusercontent.com/green-api/whatsapp-demo-chatbot-java/refs/heads/master/src/main/resources/assets/welcome_ru.jpg";
         } else {
-            welcomeFile = Paths.get("src/main/resources/assets/welcome_en.png").toFile();
+            welcomeFileUrl = "https://raw.githubusercontent.com/green-api/whatsapp-demo-chatbot-java/refs/heads/master/src/main/resources/assets/welcome_en.jpg";
         }
 
-        answerWithUploadFile(incomingMessage, welcomeFile,
-            YmlReader.getString(new String[]{"welcome_message", language.getValue()}) +
-                "*" + incomingMessage.getSenderData().getSenderName() + "*!" + "\n" +
-                YmlReader.getString(new String[]{"menu", language.getValue()}), false
-        );
+        answerWithUrlFile(incomingMessage, 
+        YmlReader.getString(new String[]{"welcome_message", language.getValue()})+"*" + incomingMessage.getSenderData().getSenderName()+"*!"+"\n"+YmlReader.getString(new String[]{"menu", language.getValue()}), 
+        welcomeFileUrl,
+        "about_java.jpg",
+        false);
     }
 }
