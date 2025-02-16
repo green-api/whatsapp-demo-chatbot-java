@@ -262,8 +262,8 @@ public class Endpoints extends Scene {
                     answerWithUrlFile(incomingMessage,
                         YmlReader.getString(new String[]{"menu", lang.getValue()}),
                         welcomeFileURL,
-                    "welcome.jpg",
-                    false);
+                        "welcome.jpg",
+                        false);
 
                     return currentState;
                 }

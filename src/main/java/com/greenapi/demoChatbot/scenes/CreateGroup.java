@@ -93,14 +93,19 @@ public class CreateGroup extends Scene {
                     return activateNextScene(currentState, endpoints);
                 }
                 case "menu", "меню", "Menu", "Меню", "0" -> {
-                    File welcomeFile;
+                    String welcomeFileURL;
                     if (lang == Language.RU) {
-                        welcomeFile = Paths.get("src/main/resources/assets/welcome_ru.png").toFile();
+                        welcomeFileURL = "https://raw.githubusercontent.com/green-api/whatsapp-demo-chatbot-java/refs/heads/master/src/main/resources/assets/welcome_ru.jpg";
                     } else {
-                        welcomeFile = Paths.get("src/main/resources/assets/welcome_en.png").toFile();
+                        welcomeFileURL = "https://raw.githubusercontent.com/green-api/whatsapp-demo-chatbot-java/refs/heads/master/src/main/resources/assets/welcome_en.jpg";
                     }
-                    answerWithUploadFile(incomingMessage, welcomeFile, YmlReader.getString(new String[]{"menu", lang.getValue()}), false);
 
+                    answerWithUrlFile(incomingMessage,
+                        YmlReader.getString(new String[]{"menu", lang.getValue()}),
+                        welcomeFileURL,
+                        "welcome.jpg",
+                        false);
+                    
                     return activateNextScene(currentState, endpoints);
                 }
                 default -> {
