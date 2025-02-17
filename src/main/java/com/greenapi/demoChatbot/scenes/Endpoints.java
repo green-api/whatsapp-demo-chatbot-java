@@ -184,10 +184,12 @@ public class Endpoints extends Scene {
                     return currentState;
                 }
                 case "10" -> {
-                    answerWithText(incomingMessage,
-                        YmlReader.getString(new String[]{"send_link_message_preview", lang.getValue()}) +
-                            YmlReader.getString(new String[]{"links", lang.getValue(), "send_link_documentation"}),
-                        false);
+                    greenApi.sending.sendMessage(OutgoingMessage.builder()
+                        .chatId(incomingMessage.getSenderData().getChatId())
+                        .message(YmlReader.getString(new String[]{"send_link_message_preview", lang.getValue()}) +
+                            YmlReader.getString(new String[]{"links", lang.getValue(), "send_link_documentation"}))
+                        .linkPreview(trie)
+                        .build());
 
                     greenApi.sending.sendMessage(OutgoingMessage.builder()
                         .chatId(incomingMessage.getSenderData().getChatId())
