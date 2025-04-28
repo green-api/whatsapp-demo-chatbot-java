@@ -188,7 +188,7 @@ public class Endpoints extends Scene {
                         .chatId(incomingMessage.getSenderData().getChatId())
                         .message(YmlReader.getString(new String[]{"send_link_message_preview", lang.getValue()}) +
                             YmlReader.getString(new String[]{"links", lang.getValue(), "send_link_documentation"}))
-                        .linkPreview(trie)
+                        .linkPreview(true)
                         .build());
 
                     greenApi.sending.sendMessage(OutgoingMessage.builder()
